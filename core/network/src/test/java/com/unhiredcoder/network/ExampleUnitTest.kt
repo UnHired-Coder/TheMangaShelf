@@ -1,4 +1,4 @@
-package com.unhiredcoder.core
+package com.unhiredcoder.network
 
 import org.junit.Test
 

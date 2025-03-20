@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unhiredcoder.feature"
+    namespace = "com.unhiredcoder.listmanga"
     compileSdk = 35
 
     defaultConfig {

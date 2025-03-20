@@ -11,7 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.unhiredcoder.core.di.networkModule
+import com.unhiredcoder.network.di.networkModule
 import com.unhiredcoder.themangashelf.ui.theme.TheMangaShelfTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin

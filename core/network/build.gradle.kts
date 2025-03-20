@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unhiredcoder.core"
+    namespace = "com.unhiredcoder.network"
     compileSdk = 34
 
     defaultConfig {
