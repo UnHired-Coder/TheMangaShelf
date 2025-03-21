@@ -13,11 +13,15 @@ private val json = Json {
 
 private const val CONTENT_TYPE = "application/json"
 
+private val unsafeOkHttpClient: OkHttpClient = OkHttpClient.Builder()
+    .hostnameVerifier { _, _ -> true } // Ignore SSL errors (DEBUG only!)
+    .build()
+
 @OptIn(ExperimentalSerializationApi::class)
 fun getRetrofitClient(): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
-        .client(OkHttpClient())
+        .client(unsafeOkHttpClient)
         .addConverterFactory(json.asConverterFactory(MediaType.parse(CONTENT_TYPE)!!))
         .build()
 }
