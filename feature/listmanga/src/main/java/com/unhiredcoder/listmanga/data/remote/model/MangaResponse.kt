@@ -1,12 +1,16 @@
 package com.unhiredcoder.listmanga.data.remote.model
 
-import com.unhiredcoder.listmanga.domain.model.MangaModel
+import com.unhiredcoder.database.model.MangaEntity
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MangaResponse(
     val id: String,
+    @SerialName("image")
     val imageUrl: String,
     val score: Double,
     val popularity: Long,
@@ -15,8 +19,8 @@ data class MangaResponse(
     val category: String
 )
 
-fun MangaResponse.mapToMangaModel(): MangaModel {
-    return MangaModel(
+fun MangaResponse.mapToMangaEntity(): MangaEntity {
+    return MangaEntity(
         id = id,
         imageUrl = imageUrl,
         score = score,
