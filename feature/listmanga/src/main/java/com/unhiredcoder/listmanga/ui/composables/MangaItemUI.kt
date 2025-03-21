@@ -1,7 +1,7 @@
 package com.unhiredcoder.listmanga.ui.composables
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -34,7 +34,8 @@ import com.unhiredcoder.listmanga.ui.model.Manga
 fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -88,9 +89,13 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                 ) {
                     Text(
                         modifier = Modifier
-                            .background(color = Color.White, shape = RoundedCornerShape(5.dp))
-                            .padding(2.dp),
-                        text = "^${manga.score}",
+                            .border(
+                                width = 0.5.dp,
+                                color = Color.Red,
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                        text = "${manga.score}*",
                         fontSize = 12.sp,
                         color = Color.Red
                     )
