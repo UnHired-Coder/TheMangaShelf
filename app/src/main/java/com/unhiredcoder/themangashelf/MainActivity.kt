@@ -12,8 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.unhiredcoder.database.di.databaseModule
+import com.unhiredcoder.listmanga.di.mangaModule
 import com.unhiredcoder.network.di.networkModule
-import com.unhiredcoder.themangashelf.ui.theme.TheMangaShelfTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -22,14 +22,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TheMangaShelfTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            modifier = Modifier.padding(innerPadding),
-                            text = "Hello!"
-                        )
-                    }
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        modifier = Modifier.padding(innerPadding),
+                        text = "Hello!"
+                    )
                 }
             }
         }
@@ -40,7 +38,7 @@ class MainActivity : ComponentActivity() {
     private fun setupKoinDI() {
         startKoin {
             androidContext(applicationContext)
-            modules(networkModule, databaseModule)
+            modules(networkModule, databaseModule, mangaModule)
         }
     }
 }
