@@ -17,7 +17,7 @@ interface IMangaC {
     }
 
     interface Local {
-        suspend fun updateMangaItem(mangaId: String, manga: MangaEntity): Boolean
+        suspend fun updateMangaItem(manga: MangaEntity): Boolean
         suspend fun updateMangaList(mangas: List<MangaEntity>)
         fun getMangaList(): Flow<List<MangaEntity>>
     }

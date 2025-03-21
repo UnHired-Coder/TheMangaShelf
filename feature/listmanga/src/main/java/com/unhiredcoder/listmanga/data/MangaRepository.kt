@@ -2,11 +2,14 @@ package com.unhiredcoder.listmanga.data
 
 import com.unhiredcoder.database.model.MangaEntity
 import com.unhiredcoder.listmanga.data.remote.model.MangaResponse
-import com.unhiredcoder.listmanga.data.remote.model.mapToMangaModel
+import com.unhiredcoder.listmanga.data.remote.model.mapToMangaEntity
 import com.unhiredcoder.listmanga.domain.model.MangaModel
 import com.unhiredcoder.listmanga.domain.model.mapToMangaModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
 class MangaRepository(
     private val mangaRemote: IMangaC.Remote,
@@ -30,21 +33,27 @@ class MangaRepository(
         localList: List<MangaEntity>
     ): List<MangaModel> {
         return remoteList.map { remoteMangaItem ->
-            val remoteMangaModel = remoteMangaItem.mapToMangaModel()
+            val remoteMangaEntity = remoteMangaItem.mapToMangaEntity()
 
-            val localMangaItem =
+            val localMangaEntity =
                 localList.find { localMangaItem ->
-                    localMangaItem.id == remoteMangaModel.id
-                }?.mapToMangaModel() ?: remoteMangaModel
+                    localMangaItem.id == remoteMangaEntity.id
+                } ?: remoteMangaEntity
 
-            localMangaItem.copy(
-                imageUrl = remoteMangaModel.imageUrl,
-                title = remoteMangaModel.title,
-                publishedChapterDate = remoteMangaModel.publishedChapterDate,
-                score = remoteMangaModel.score,
-                popularity = remoteMangaModel.popularity,
-                category = remoteMangaModel.category,
+            localMangaEntity.copy(
+                imageUrl = remoteMangaEntity.imageUrl,
+                title = remoteMangaEntity.title,
+                publishedChapterDate = remoteMangaEntity.publishedChapterDate,
+                score = remoteMangaEntity.score,
+                popularity = remoteMangaEntity.popularity,
+                category = remoteMangaEntity.category,
             )
+        }.also { mergeEntities ->
+            CoroutineScope(Dispatchers.IO).launch {
+                mangaLocal.updateMangaList(mergeEntities)
+            }
+        }.map {
+            it.mapToMangaModel()
         }
     }
 }
