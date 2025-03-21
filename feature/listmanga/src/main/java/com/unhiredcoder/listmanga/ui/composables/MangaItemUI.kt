@@ -23,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
+import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.Manga
 
 @Composable
@@ -54,7 +56,7 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                 success = { _, painter ->
                     Image(
                         painter = painter, // Dummy image
-                        contentDescription = "Manga Cover",
+                        contentDescription = stringResource(R.string.manga_cover),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -77,7 +79,7 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                 )
 
                 Text(
-                    text = "Category: ${manga.category}",
+                    text = stringResource(R.string.category, manga.category),
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
@@ -95,13 +97,13 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                                 shape = RoundedCornerShape(5.dp)
                             )
                             .padding(horizontal = 6.dp, vertical = 2.dp),
-                        text = "${manga.score}*",
+                        text = stringResource(R.string.score, manga.score),
                         fontSize = 12.sp,
                         color = Color.Red
                     )
 
                     Text(
-                        text = "Pub: ${manga.publishedChapterDate}",
+                        text = stringResource(R.string.pub_date, manga.publishedChapterDate),
                         fontSize = 10.sp,
                         color = Color.Gray
                     )

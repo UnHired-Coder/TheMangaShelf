@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 
 
@@ -37,7 +39,7 @@ fun ListMangaSuccessUI(modifier: Modifier = Modifier, listMangaUiState: ListMang
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 16.dp),
-                text = "The Manga App",
+                text = stringResource(R.string.the_manga_app),
                 fontFamily = FontFamily.Serif
             )
         }
