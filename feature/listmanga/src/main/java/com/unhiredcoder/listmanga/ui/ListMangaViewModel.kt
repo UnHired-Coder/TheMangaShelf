@@ -2,28 +2,36 @@ package com.unhiredcoder.listmanga.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.listmanga.domain.ListMangaUseCase
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 
-class ListMangaViewModel(private val listMangaUseCase: ListMangaUseCase) : ViewModel() {
-    val listMangaUiState: StateFlow<ListMangaUiState> = getMangaUiState().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = ListMangaUiState.Idle,
-    )
+class ListMangaViewModel(listMangaUseCase: ListMangaUseCase) : ViewModel() {
 
-    private fun getMangaUiState(): Flow<ListMangaUiState> {
-        return listMangaUseCase().map {
-            ListMangaUiState.Success(it)
-        }.onStart {
-            ListMangaUiState.Loading
-        }.catch { ListMangaUiState.Failure(it.message) }
+    private val _mangaUiStateFlow =
+        MutableStateFlow<Resource<ListMangaUiState>>(Resource.Idle(null))
+    val listMangaUiState: StateFlow<Resource<ListMangaUiState>> = _mangaUiStateFlow.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            listMangaUseCase()
+                .map { mangaList ->
+                    Resource.Success(ListMangaUiState(mangaList))
+                }
+                .onStart {
+                    _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
+                }
+                .catch { e ->
+                    _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
+                }
+                .collect { result -> _mangaUiStateFlow.update { result } }
+        }
     }
 }
