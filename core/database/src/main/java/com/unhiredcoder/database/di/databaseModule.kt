@@ -6,7 +6,7 @@ import com.unhiredcoder.database.getMangaAppDatabase
 import org.koin.dsl.module
 
 val databaseModule = module {
-    single {
+    single<MangaAppDatabase> {
         getMangaAppDatabase(get())
     }
     single<MangaDao> {
