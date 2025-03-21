@@ -39,8 +39,10 @@ android {
 dependencies {
     implementation(libs.kotlinx.dateTime)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.compose)
 
     api(project(":core:database"))
     api(project(":core:network"))
     api(project(":core:common"))
+    implementation(libs.androidx.foundation.layout.android)
 }
