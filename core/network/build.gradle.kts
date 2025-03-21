@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -13,7 +14,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"https://jsonkeeper.com/\"")
+        buildConfigField("String", "BASE_URL", "\"https://jsonkeeper.com/b/\"")
     }
 
     buildTypes {
@@ -41,7 +42,7 @@ dependencies {
     android.buildFeatures.buildConfig = true
 
     api(libs.retrofit)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    api(libs.kotlinx.serialization.json)
+    api(libs.retrofit2.kotlinx.serialization.converter)
     implementation(project(":core:common"))
 }
