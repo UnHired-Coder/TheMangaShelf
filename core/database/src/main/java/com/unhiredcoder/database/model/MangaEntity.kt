@@ -11,7 +11,7 @@ data class MangaEntity(
     val score: Double,
     val popularity: Long,
     val title: String,
-    val publishedChapterDate: String,
+    val publishedChapterDate: Long,
     val category: String,
     val isFavourite: Boolean = false,
     val isReadByUser: Boolean = false

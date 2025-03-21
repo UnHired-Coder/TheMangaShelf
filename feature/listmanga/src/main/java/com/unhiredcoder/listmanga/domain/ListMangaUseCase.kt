@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 class ListMangaUseCase(private val mangaRepository: IMangaC.Repository) {
     operator fun invoke(): Flow<List<Manga>> {
         return mangaRepository.getMangaList().map { mangaModelsList ->
-            mangaModelsList.map { mangaModel ->
+            mangaModelsList.sortedByDescending { it.publishedChapterDate }.map { mangaModel ->
                 mangaModel.mapToManga()
             }
         }

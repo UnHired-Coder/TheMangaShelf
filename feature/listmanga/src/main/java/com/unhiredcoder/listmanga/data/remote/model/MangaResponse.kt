@@ -1,9 +1,6 @@
 package com.unhiredcoder.listmanga.data.remote.model
 
 import com.unhiredcoder.database.model.MangaEntity
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -47,11 +44,7 @@ fun MangaResponse.mapToMangaEntity(): MangaEntity {
         score = score!!,
         popularity = popularity!!,
         title = title!!,
-        publishedChapterDate = publishedChapterDate.let {
-            val dateTime = Instant.fromEpochSeconds(publishedChapterDate!!)
-                .toLocalDateTime(TimeZone.currentSystemDefault())
-            "${dateTime.dayOfMonth}-${dateTime.monthNumber}-${dateTime.year}"
-        },
+        publishedChapterDate = publishedChapterDate!!,
         category = category!!,
         isFavourite = false,
         isReadByUser = false

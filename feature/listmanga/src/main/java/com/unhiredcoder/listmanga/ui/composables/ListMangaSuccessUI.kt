@@ -3,6 +3,7 @@ package com.unhiredcoder.listmanga.ui.composables
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 
@@ -45,6 +47,13 @@ fun ListMangaSuccessUI(modifier: Modifier = Modifier, listMangaUiState: ListMang
         }
 
         stickyHeader {
+            Text(
+                modifier = Modifier.padding(start = 12.dp, bottom = 4.dp),
+                fontSize = 10.sp,
+                color = Color.Black.copy(alpha = 0.6f),
+                text = "Select date"
+            )
+
             val dates = remember { listMangaUiState.mangaGroupWithIndex.mangaMap.keys.toList() }
             LazyRow(
                 modifier = Modifier

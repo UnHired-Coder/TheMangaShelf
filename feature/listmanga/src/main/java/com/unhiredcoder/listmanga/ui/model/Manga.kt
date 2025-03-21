@@ -1,6 +1,9 @@
 package com.unhiredcoder.listmanga.ui.model
 
 import com.unhiredcoder.listmanga.domain.model.MangaModel
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 //select date -> scroll to ui index
 //scroll -> update the index on UI
@@ -30,16 +33,32 @@ fun MangaModel.mapToManga(): Manga {
         score = score,
         popularity = popularity,
         title = title,
-        publishedChapterDate = publishedChapterDate,
+        publishedChapterDate = publishedChapterDate.let {
+            val dateTime = Instant.fromEpochSeconds(publishedChapterDate!!)
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+            val daySuffix = getDaySuffix(dateTime.dayOfMonth)
+            val month = dateTime.month.name.lowercase().replaceFirstChar { it.uppercase() } // Capitalize month
+            val year = dateTime.year
+            "${dateTime.dayOfMonth}$daySuffix $month, $year"
+        },
         category = category,
         isFavourite = isFavourite,
         isReadByUser = isReadByUser
     )
 }
 
+private fun getDaySuffix(day: Int): String {
+    return when {
+        day in 11..13 -> "th"
+        day % 10 == 1 -> "st"
+        day % 10 == 2 -> "nd"
+        day % 10 == 3 -> "rd"
+        else -> "th"
+    }
+}
 
 fun List<Manga>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
-    val map = sortedBy { it.publishedChapterDate }.groupBy { it.publishedChapterDate }
+    val map = groupBy { it.publishedChapterDate }
     return MangaGroupWithIndex(
         mangaMap = map,
         mapOf(),
