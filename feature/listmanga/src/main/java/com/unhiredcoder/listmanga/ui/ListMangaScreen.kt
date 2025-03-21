@@ -19,8 +19,11 @@ fun ListMangaScreen(
     ScreenStateComposable(
         modifier = modifier.background(Color.Red),
         resourceFlow = listMangaUiStateFlow,
-        onSuccessComposable = { mangaState ->
-            ListMangaSuccessUI(mangaList = mangaState.mangaList)
+        onSuccessComposable = { listMangaUiState ->
+            ListMangaSuccessUI(
+                modifier = Modifier.background(Color.White),
+                listMangaUiState = listMangaUiState
+            )
         }
     )
 }

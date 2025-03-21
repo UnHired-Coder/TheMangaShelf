@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.listmanga.domain.ListMangaUseCase
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
+import com.unhiredcoder.listmanga.ui.model.mapToMangaGroupWithIndex
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -23,7 +24,11 @@ class ListMangaViewModel(listMangaUseCase: ListMangaUseCase) : ViewModel() {
         viewModelScope.launch {
             listMangaUseCase()
                 .map { mangaList ->
-                    Resource.Success(ListMangaUiState(mangaList))
+                    Resource.Success(
+                        ListMangaUiState(
+                            mangaList.mapToMangaGroupWithIndex()
+                        )
+                    )
                 }
                 .onStart {
                     _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
