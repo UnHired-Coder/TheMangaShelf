@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MangaDao {
     @Upsert
-    suspend fun updateMangaList(mangas: List<MangaEntity>): Long
+    suspend fun updateMangaList(mangas: List<MangaEntity>): List<Long>
 
     @Query("SELECT * FROM manga_entity")
     fun getMangaList(): Flow<List<MangaEntity>>
 
     @Upsert
-    suspend fun updateMangaItem(mangaId: String, manga: MangaEntity): Int
+    suspend fun updateMangaItem(manga: MangaEntity): Long
 }
