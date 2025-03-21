@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "TheMangaShelf"
 include(":app", ":feature:listmanga", ":core:network")
+include(":core:database")
+include(":core:common")
