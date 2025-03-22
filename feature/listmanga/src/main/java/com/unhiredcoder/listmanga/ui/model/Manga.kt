@@ -9,9 +9,8 @@ import kotlinx.datetime.toLocalDateTime
 //scroll -> update the index on UI
 
 data class MangaGroupWithIndex(
-    val mangaMap: Map<String, List<Manga>>,
-    val mangaPosToPillPos: Map<Int, Int>,
-    val pillPosToMangaPos: Map<Int, Int>
+    val mangaMapByDates: Map<String, List<Manga>>,
+    val pillPosToFirstMangaPos: Map<Int, Int>
 )
 
 data class Manga(
@@ -37,7 +36,8 @@ fun MangaModel.mapToManga(): Manga {
             val dateTime = Instant.fromEpochSeconds(publishedChapterDate!!)
                 .toLocalDateTime(TimeZone.currentSystemDefault())
             val daySuffix = getDaySuffix(dateTime.dayOfMonth)
-            val month = dateTime.month.name.lowercase().replaceFirstChar { it.uppercase() } // Capitalize month
+            val month = dateTime.month.name.lowercase()
+                .replaceFirstChar { it.uppercase() } // Capitalize month
             val year = dateTime.year
             "${dateTime.dayOfMonth}$daySuffix $month, $year"
         },
@@ -58,10 +58,19 @@ private fun getDaySuffix(day: Int): String {
 }
 
 fun List<Manga>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
-    val map = groupBy { it.publishedChapterDate }
+    val mangaMapByDates = groupBy { it.publishedChapterDate }
+    var firstMangaIndex = 0
+    var dateIndex = 0
+    val datesMap: MutableMap<Int, Int> = mutableMapOf()
+
+    mangaMapByDates.map { (_, u) ->
+        datesMap += mapOf(dateIndex to firstMangaIndex)
+        dateIndex++
+        firstMangaIndex += u.size + 1
+    }
+
     return MangaGroupWithIndex(
-        mangaMap = map,
-        mapOf(),
-        mapOf()
+        mangaMapByDates = mangaMapByDates,
+        datesMap
     )
 }

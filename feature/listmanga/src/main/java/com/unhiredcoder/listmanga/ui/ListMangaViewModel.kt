@@ -26,7 +26,8 @@ class ListMangaViewModel(listMangaUseCase: ListMangaUseCase) : ViewModel() {
                 .map { mangaList ->
                     Resource.Success(
                         ListMangaUiState(
-                            mangaList.mapToMangaGroupWithIndex()
+                            mangaList.mapToMangaGroupWithIndex(),
+                            selectedDateIndex = _mangaUiStateFlow.value.data?.selectedDateIndex ?: 0
                         )
                     )
                 }
@@ -37,6 +38,18 @@ class ListMangaViewModel(listMangaUseCase: ListMangaUseCase) : ViewModel() {
                     _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
                 }
                 .collect { result -> _mangaUiStateFlow.update { result } }
+        }
+    }
+
+    fun onDateSelected(dateIndex: Int) {
+        _mangaUiStateFlow.update { state ->
+            (state as? Resource.Success)?.let {
+                state.copyWith(
+                    newData = state.data?.copy(
+                        selectedDateIndex = dateIndex
+                    )
+                )
+            } ?: state
         }
     }
 }
