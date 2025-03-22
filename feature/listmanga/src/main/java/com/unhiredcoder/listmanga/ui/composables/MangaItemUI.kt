@@ -157,8 +157,7 @@ fun MangaItemPreview() {
             title = "This is some long title that will go out of bounds",
             publishedChapterDate = "20-03-2010",
             category = "Anime",
-            isFavourite = false,
-            isReadByUser = false,
+            isFavourite = false
         ),
     ){}
 }

@@ -1,12 +1,7 @@
 package com.unhiredcoder.listmanga.ui.model
 
 import com.unhiredcoder.domain.model.MangaDomainModel
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-
-//select date -> scroll to ui index
-//scroll -> update the index on UI
+import com.unhiredcoder.ui.toReadableDate
 
 data class MangaGroupWithIndex(
     val mangaUiModelMapByDates: Map<String, List<MangaUiModel>>,
@@ -22,7 +17,6 @@ data class MangaUiModel(
     val publishedChapterDate: String,
     val category: String,
     val isFavourite: Boolean,
-    val isReadByUser: Boolean
 )
 
 fun MangaDomainModel.mapToMangaUiModel(): MangaUiModel {
@@ -32,30 +26,12 @@ fun MangaDomainModel.mapToMangaUiModel(): MangaUiModel {
         score = score,
         popularity = popularity,
         title = title,
-        publishedChapterDate = publishedChapterDate.let {
-            val dateTime = Instant.fromEpochSeconds(publishedChapterDate!!)
-                .toLocalDateTime(TimeZone.currentSystemDefault())
-            val daySuffix = getDaySuffix(dateTime.dayOfMonth)
-            val month = dateTime.month.name.lowercase()
-                .replaceFirstChar { it.uppercase() } // Capitalize month
-            val year = dateTime.year
-            "${dateTime.dayOfMonth}$daySuffix $month, $year"
-        },
+        publishedChapterDate = publishedChapterDate.toReadableDate(),
         category = category,
         isFavourite = isFavourite,
-        isReadByUser = isReadByUser
     )
 }
 
-private fun getDaySuffix(day: Int): String {
-    return when {
-        day in 11..13 -> "th"
-        day % 10 == 1 -> "st"
-        day % 10 == 2 -> "nd"
-        day % 10 == 3 -> "rd"
-        else -> "th"
-    }
-}
 
 fun List<MangaUiModel>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
     val mangaMapByDates = groupBy { it.publishedChapterDate }

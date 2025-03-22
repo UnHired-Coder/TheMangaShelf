@@ -17,6 +17,10 @@ class MangaRepositoryImpl(
 
     private val localMangaFlow = mangaLocal.getMangaList()
 
+    override fun getMangaById(mangaId: String): Flow<MangaDomainModel?> {
+        return mangaLocal.getMangaById(mangaId = mangaId).map { it?.mapToMangaDomainModel() }
+    }
+
     override fun getMangaList(): Flow<List<MangaDomainModel>> {
         return localMangaFlow.map { mangaList ->
             mangaList.map { mangaEntity ->
@@ -25,7 +29,7 @@ class MangaRepositoryImpl(
         }
     }
 
-    override suspend fun getMangaListRemote(): Flow<List<MangaDomainModel>> {
+    override fun getMangaListRemote(): Flow<List<MangaDomainModel>> {
         return mangaRemote.getMangaList().map { mangaList ->
             mangaList.map { mangaResponse ->
                 mangaResponse.mapToMangaDomainUiModel()

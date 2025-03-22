@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -51,6 +53,9 @@ dependencies {
     api(libs.androidx.ui.test.junit4)
     api(libs.androidx.ui.tooling)
     api(libs.androidx.ui.test.manifest)
+    api(libs.androidx.navigation.compose)
+    api(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.dateTime)
 
     implementation(project(":core:common"))
 }

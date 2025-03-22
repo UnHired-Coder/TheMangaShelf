@@ -16,36 +16,6 @@ data class MangaDataModel(
     val isReadByUser: Boolean
 )
 
-
-fun MangaEntity.mapToMangaDataModel(): MangaDataModel {
-    return MangaDataModel(
-        id = id,
-        imageUrl = imageUrl,
-        score = score,
-        popularity = popularity,
-        title = title,
-        publishedChapterDate = publishedChapterDate,
-        category = category,
-        isFavourite = isFavourite,
-        isReadByUser = isReadByUser
-    )
-}
-
-fun MangaResponse.mapToMangaEntity(): MangaEntity {
-    validateMangaResponse()
-    return MangaEntity(
-        id = id!!,
-        imageUrl = imageUrl!!,
-        score = score!!,
-        popularity = popularity!!,
-        title = title!!,
-        publishedChapterDate = publishedChapterDate!!,
-        category = category!!,
-        isFavourite = false,
-        isReadByUser = false
-    )
-}
-
 fun MangaDomainModel.mapToMangaEntity(): MangaEntity {
     return MangaEntity(
         id = id,

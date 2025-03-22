@@ -46,6 +46,7 @@ dependencies {
 
 
     implementation(project(":feature:listmanga"))
+    implementation(project(":feature:mangadetails"))
     implementation(project(":core:ui"))
     implementation(project(":core:di"))
 }

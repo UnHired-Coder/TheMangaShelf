@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
+import com.unhiredcoder.ui.clickableWithNoRipple
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 
@@ -45,7 +46,8 @@ fun ListMangaSuccessUI(
     modifier: Modifier = Modifier,
     listMangaUiState: ListMangaUiState,
     onDateSelected: (dateIndex: Int) -> Unit,
-    onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit
+    onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit,
+    onDisplayManga: (mangaUiModel: MangaUiModel) -> Unit,
 ) {
     val mangaMap = listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates
 
@@ -138,8 +140,8 @@ fun ListMangaSuccessUI(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                itemsIndexed(dates) { dateIndex, date ->
-                    DatePillViewUI(date = date,
+                itemsIndexed(dates) { dateIndex, publishDate ->
+                    DatePillViewUI(date = publishDate,
                         isSelected = remember(listMangaUiState.selectedDateIndex) { listMangaUiState.selectedDateIndex == dateIndex },
                         onDateSelected = {
                             isAutoScroll = true
@@ -161,10 +163,14 @@ fun ListMangaSuccessUI(
                 DateSeparatorUI(date = date)
             }
 
-            items(mangas) { manga ->
+            items(mangas) { mangaUiModel ->
                 MangaItemUI(
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    mangaUiModel = manga,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .clickableWithNoRipple {
+                            onDisplayManga(mangaUiModel)
+                        },
+                    mangaUiModel = mangaUiModel,
                     onMarkFavourite = onMarkFavourite
                 )
             }

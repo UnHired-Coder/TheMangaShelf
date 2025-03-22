@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.dateTime)
     implementation(libs.androidx.room.runtime)
     implementation(libs.compose)
 

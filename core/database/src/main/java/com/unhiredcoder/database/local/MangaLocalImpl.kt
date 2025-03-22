@@ -17,4 +17,8 @@ class MangaLocalImpl(private val mangaDao: MangaDao) : MangaLocal {
     override fun getMangaList(): Flow<List<MangaEntity>> {
         return mangaDao.getMangaList()
     }
+
+    override fun getMangaById(mangaId: String): Flow<MangaEntity?> {
+        return mangaDao.getMangaById(mangaId)
+    }
 }

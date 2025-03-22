@@ -19,6 +19,7 @@ kotlinx-datetime = "0.6.0"
 roomCompiler = "2.5.0"
 roomRuntime = "2.6.1"
 foundationLayoutAndroid = "1.6.6"
+navigationCompose = "2.8.9"
 
 
 [libraries]
@@ -49,6 +50,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 
 [plugins]

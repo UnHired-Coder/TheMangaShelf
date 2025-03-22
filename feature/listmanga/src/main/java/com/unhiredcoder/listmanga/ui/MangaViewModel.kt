@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.supervisorScope
 
-class ListMangaViewModel(
+class MangaViewModel(
     getMangaListUseCase: GetMangaListUseCase,
     syncManagUseCase: SyncManagUseCase,
     private val markMangaFavouriteUseCase: MarkMangaFavouriteUseCase
@@ -47,7 +47,7 @@ class ListMangaViewModel(
                             _mangaUiStateFlow.value =
                                 Resource.Failure(_mangaUiStateFlow.value.data, e)
                         }
-                        .collect { result -> _mangaUiStateFlow.update { result } }
+                        .collect { listMangaUiModelResource -> _mangaUiStateFlow.update { listMangaUiModelResource } }
                 }
 
                 launch {
