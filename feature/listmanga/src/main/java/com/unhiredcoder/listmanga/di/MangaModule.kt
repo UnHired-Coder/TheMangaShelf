@@ -5,7 +5,8 @@ import com.unhiredcoder.listmanga.data.MangaRepository
 import com.unhiredcoder.listmanga.data.local.MangaLocal
 import com.unhiredcoder.listmanga.data.remote.MangaRemote
 import com.unhiredcoder.listmanga.data.remote.api.MangaWebService
-import com.unhiredcoder.listmanga.domain.ListMangaUseCase
+import com.unhiredcoder.listmanga.domain.GetMangaListUseCase
+import com.unhiredcoder.listmanga.domain.SyncManagUseCase
 import com.unhiredcoder.listmanga.ui.ListMangaViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -28,8 +29,12 @@ val mangaModule = module {
         MangaRepository(get(), get())
     }
 
-    factory<ListMangaUseCase> {
-        ListMangaUseCase(get())
+    factory<GetMangaListUseCase> {
+        GetMangaListUseCase(get())
+    }
+
+    factory<SyncManagUseCase> {
+        SyncManagUseCase(get())
     }
 
     viewModelOf(::ListMangaViewModel)
