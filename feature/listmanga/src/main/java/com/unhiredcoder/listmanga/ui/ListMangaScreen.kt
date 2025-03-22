@@ -8,6 +8,7 @@ import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.common.ui.ScreenStateComposable
 import com.unhiredcoder.listmanga.ui.composables.ListMangaSuccessUI
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
+import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import kotlinx.coroutines.flow.StateFlow
 
 
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
 fun ListMangaScreen(
     modifier: Modifier = Modifier,
     listMangaUiStateFlow: StateFlow<Resource<ListMangaUiState>>,
-    onDateSelected: (dateIndex: Int) -> Unit
+    onDateSelected: (dateIndex: Int) -> Unit,
+    onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit
 ) {
     ScreenStateComposable(
         modifier = modifier.background(Color.Red),
@@ -24,7 +26,8 @@ fun ListMangaScreen(
             ListMangaSuccessUI(
                 modifier = Modifier.background(Color.White),
                 listMangaUiState = listMangaUiState,
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
+                onMarkFavourite = onMarkFavourite
             )
         }
     )

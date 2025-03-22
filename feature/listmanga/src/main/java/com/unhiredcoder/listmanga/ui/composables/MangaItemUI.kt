@@ -18,22 +18,29 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
+import com.unhiredcoder.common.ui.clickableWithNoRipple
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 
 @Composable
-fun MangaItemUI(modifier: Modifier = Modifier, mangaUiModel: MangaUiModel) {
+fun MangaItemUI(
+    modifier: Modifier = Modifier,
+    mangaUiModel: MangaUiModel,
+    onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -69,20 +76,44 @@ fun MangaItemUI(modifier: Modifier = Modifier, mangaUiModel: MangaUiModel) {
                 modifier = Modifier.height(IntrinsicSize.Min),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
+                Row(horizontalArrangement = Arrangement.Start) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = mangaUiModel.title,
+                            fontSize = 14.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
 
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = mangaUiModel.title,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                        Text(
+                            text = stringResource(R.string.category, mangaUiModel.category),
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
+                    }
 
-                Text(
-                    text = stringResource(R.string.category, mangaUiModel.category),
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
+                    Image(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickableWithNoRipple {
+                                onMarkFavourite(mangaUiModel)
+                            },
+                        painter = painterResource(remember(mangaUiModel.isFavourite) {
+                            if (mangaUiModel.isFavourite) {
+                                R.drawable.ic_favourite_filled
+                            } else
+                                R.drawable.ic_favourite_outlined
+                        }),
+                        contentDescription = null
+                    )
+
+                }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -128,6 +159,6 @@ fun MangaItemPreview() {
             category = "Anime",
             isFavourite = false,
             isReadByUser = false,
-        )
-    )
+        ),
+    ){}
 }

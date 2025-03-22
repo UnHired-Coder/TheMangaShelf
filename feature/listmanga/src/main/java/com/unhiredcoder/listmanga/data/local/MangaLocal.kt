@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 
 class MangaLocal(private val mangaDao: MangaDao) : IMangaC.Local {
-    override suspend fun updateMangaItem(manga: MangaEntity):Boolean {
-        return mangaDao.updateMangaItem(manga = manga) > 0
+    override suspend fun markMangaFavourite(mangaId: String):Boolean {
+        return mangaDao.markMangaFavourite(mangaId = mangaId) > 0
     }
 
     override suspend fun updateMangaList(mangas: List<MangaEntity>) {

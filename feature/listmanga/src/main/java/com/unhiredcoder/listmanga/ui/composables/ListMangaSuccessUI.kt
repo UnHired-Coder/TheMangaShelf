@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
+import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 
@@ -43,7 +44,8 @@ import kotlinx.coroutines.flow.filterNotNull
 fun ListMangaSuccessUI(
     modifier: Modifier = Modifier,
     listMangaUiState: ListMangaUiState,
-    onDateSelected: (dateIndex: Int) -> Unit
+    onDateSelected: (dateIndex: Int) -> Unit,
+    onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit
 ) {
     val mangaMap = listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates
 
@@ -161,7 +163,9 @@ fun ListMangaSuccessUI(
 
             items(mangas) { manga ->
                 MangaItemUI(
-                    modifier = Modifier.padding(bottom = 8.dp), mangaUiModel = manga
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    mangaUiModel = manga,
+                    onMarkFavourite = onMarkFavourite
                 )
             }
 

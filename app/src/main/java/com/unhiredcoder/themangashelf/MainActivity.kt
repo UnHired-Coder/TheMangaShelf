@@ -19,7 +19,8 @@ class MainActivity : ComponentActivity() {
             ListMangaScreen(
                 modifier = Modifier.fillMaxSize(),
                 listMangaUiStateFlow = listMangaViewMode.listMangaUiState,
-                onDateSelected = listMangaViewMode::onDateSelected
+                onDateSelected = listMangaViewMode::onDateSelected,
+                onMarkFavourite = listMangaViewMode::markFavourite
             )
         }
     }

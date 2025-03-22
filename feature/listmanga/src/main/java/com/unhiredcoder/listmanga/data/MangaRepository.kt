@@ -34,6 +34,6 @@ class MangaRepository(
     }
 
     override suspend fun markMangaFavourite(mangaId: String): Boolean {
-        return true
+        return mangaLocal.markMangaFavourite(mangaId)
     }
 }

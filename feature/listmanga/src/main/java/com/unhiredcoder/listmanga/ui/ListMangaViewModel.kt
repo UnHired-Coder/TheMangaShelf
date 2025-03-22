@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.listmanga.domain.GetMangaListUseCase
+import com.unhiredcoder.listmanga.domain.MarkMangaFavouriteUseCase
 import com.unhiredcoder.listmanga.domain.SyncManagUseCase
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
+import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import com.unhiredcoder.listmanga.ui.model.mapToMangaGroupWithIndex
 import com.unhiredcoder.listmanga.ui.model.mapToMangaUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,8 @@ import kotlinx.coroutines.supervisorScope
 
 class ListMangaViewModel(
     getMangaListUseCase: GetMangaListUseCase,
-    syncManagUseCase: SyncManagUseCase
+    syncManagUseCase: SyncManagUseCase,
+    private val markMangaFavouriteUseCase: MarkMangaFavouriteUseCase
 ) : ViewModel() {
 
     private val _mangaUiStateFlow =
@@ -72,6 +75,12 @@ class ListMangaViewModel(
                     )
                 }
             } ?: state
+        }
+    }
+
+    fun markFavourite(mangaUiModel: MangaUiModel) {
+        viewModelScope.launch {
+            markMangaFavouriteUseCase(mangaUiModel.id)
         }
     }
 }
