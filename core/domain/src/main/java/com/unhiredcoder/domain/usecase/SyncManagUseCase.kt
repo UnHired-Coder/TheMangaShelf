@@ -1,25 +1,25 @@
-package com.unhiredcoder.listmanga.domain
+package com.unhiredcoder.domain.usecase
 
-import com.unhiredcoder.listmanga.data.IMangaC
-import com.unhiredcoder.listmanga.data.MangaDataModel
+import com.unhiredcoder.domain.MangaRepository
+import com.unhiredcoder.domain.model.MangaDomainModel
 import kotlinx.coroutines.flow.combine
 
-class SyncManagUseCase(private val mangaRepository: IMangaC.Repository) {
+class SyncManagUseCase(private val mangaRepository: MangaRepository) {
     suspend operator fun invoke() {
         combine(
             mangaRepository.getMangaListRemote(),
-            mangaRepository.getMangaListLocal()
+            mangaRepository.getMangaList()
         ) { remoteMangasList, localMangasList ->
             mergeMangaLists(remoteMangasList, localMangasList)
         }.collect {
-            mangaRepository.updateManagaList(it)
+            mangaRepository.refreshMangaList(it)
         }
     }
 
     private fun mergeMangaLists(
-        remoteList: List<MangaDataModel>,
-        localList: List<MangaDataModel>
-    ): List<MangaDataModel> {
+        remoteList: List<MangaDomainModel>,
+        localList: List<MangaDomainModel>
+    ): List<MangaDomainModel> {
         return remoteList.map { remoteMangaEntity ->
             val localMangaEntity =
                 localList.find { localMangaItem ->
