@@ -18,7 +18,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ListMangaScreen(
                 modifier = Modifier.fillMaxSize(),
-                listMangaUiStateFlow = listMangaViewMode.listMangaUiState
+                listMangaUiStateFlow = listMangaViewMode.listMangaUiState,
+                onDateSelected = listMangaViewMode::onDateSelected
             )
         }
     }

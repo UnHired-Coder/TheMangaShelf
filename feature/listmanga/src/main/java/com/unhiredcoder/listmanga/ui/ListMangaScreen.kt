@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun ListMangaScreen(
     modifier: Modifier = Modifier,
-    listMangaUiStateFlow: StateFlow<Resource<ListMangaUiState>>
+    listMangaUiStateFlow: StateFlow<Resource<ListMangaUiState>>,
+    onDateSelected: (dateIndex: Int) -> Unit
 ) {
     ScreenStateComposable(
         modifier = modifier.background(Color.Red),
@@ -22,7 +23,8 @@ fun ListMangaScreen(
         onSuccessComposable = { listMangaUiState ->
             ListMangaSuccessUI(
                 modifier = Modifier.background(Color.White),
-                listMangaUiState = listMangaUiState
+                listMangaUiState = listMangaUiState,
+                onDateSelected = onDateSelected
             )
         }
     )
