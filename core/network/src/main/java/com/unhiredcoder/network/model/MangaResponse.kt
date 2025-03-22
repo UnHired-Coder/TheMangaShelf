@@ -1,6 +1,5 @@
-package com.unhiredcoder.listmanga.data.remote.model
+package com.unhiredcoder.network.model
 
-import com.unhiredcoder.database.model.MangaEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,19 +33,4 @@ data class MangaResponse(
             throw Throwable(invalidResponse)
         }
     }
-}
-
-fun MangaResponse.mapToMangaEntity(): MangaEntity {
-    validateMangaResponse()
-    return MangaEntity(
-        id = id!!,
-        imageUrl = imageUrl!!,
-        score = score!!,
-        popularity = popularity!!,
-        title = title!!,
-        publishedChapterDate = publishedChapterDate!!,
-        category = category!!,
-        isFavourite = false,
-        isReadByUser = false
-    )
 }

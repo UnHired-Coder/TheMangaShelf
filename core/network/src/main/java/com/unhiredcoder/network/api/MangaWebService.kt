@@ -1,6 +1,6 @@
-package com.unhiredcoder.listmanga.data.remote.api
+package com.unhiredcoder.network.api
 
-import com.unhiredcoder.listmanga.data.remote.model.MangaResponse
+import com.unhiredcoder.network.model.MangaResponse
 import retrofit2.http.GET
 
 interface MangaWebService {

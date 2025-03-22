@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
@@ -31,14 +30,13 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
-    api(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler.v250)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+
+    ksp(libs.androidx.room.compiler.v250)
+
     implementation(project(":core:common"))
 }

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.10"
 }
 
@@ -33,16 +32,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
     android.buildFeatures.buildConfig = true
+    implementation(libs.kotlinx.coroutines.android)
 
-    api(libs.retrofit)
-    api(libs.kotlinx.serialization.json)
-    api(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.retrofit)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(project(":core:common"))
 }
