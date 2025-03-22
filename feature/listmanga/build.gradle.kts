@@ -41,8 +41,13 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.compose)
 
-    api(project(":core:database"))
-    api(project(":core:network"))
-    api(project(":core:common"))
+    implementation(libs.koin.android)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.foundation.layout.android)
+
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:di"))
+    implementation(project(":core:common"))
+
 }

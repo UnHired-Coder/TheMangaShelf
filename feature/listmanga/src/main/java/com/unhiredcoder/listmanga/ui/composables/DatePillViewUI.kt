@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unhiredcoder.common.ui.clickableWithNoRipple
+import com.unhiredcoder.ui.clickableWithNoRipple
 
 @Composable
 fun DatePillViewUI(date: String, isSelected: Boolean = false, onDateSelected: () -> Unit = {}) {

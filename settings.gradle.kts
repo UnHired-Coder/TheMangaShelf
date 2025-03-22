@@ -23,3 +23,7 @@ rootProject.name = "TheMangaShelf"
 include(":app", ":feature:listmanga", ":core:network")
 include(":core:database")
 include(":core:common")
+include(":core:data")
+include(":core:domain")
+include(":core:di")
+include(":core:ui")

@@ -3,9 +3,9 @@ package com.unhiredcoder.listmanga.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unhiredcoder.common.data.Resource
-import com.unhiredcoder.listmanga.domain.GetMangaListUseCase
-import com.unhiredcoder.listmanga.domain.MarkMangaFavouriteUseCase
-import com.unhiredcoder.listmanga.domain.SyncManagUseCase
+import com.unhiredcoder.domain.usecase.GetMangaListUseCase
+import com.unhiredcoder.domain.usecase.MarkMangaFavouriteUseCase
+import com.unhiredcoder.domain.usecase.SyncManagUseCase
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import com.unhiredcoder.listmanga.ui.model.mapToMangaGroupWithIndex

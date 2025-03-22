@@ -1,6 +1,6 @@
 package com.unhiredcoder.listmanga.ui.model
 
-import com.unhiredcoder.listmanga.domain.model.MangaDomainModel
+import com.unhiredcoder.domain.model.MangaDomainModel
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

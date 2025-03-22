@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
-import com.unhiredcoder.common.ui.clickableWithNoRipple
+import com.unhiredcoder.ui.clickableWithNoRipple
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 
