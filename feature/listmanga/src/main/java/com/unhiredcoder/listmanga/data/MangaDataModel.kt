@@ -1,8 +1,8 @@
-package com.unhiredcoder.listmanga.domain.model
+package com.unhiredcoder.listmanga.data
 
 import com.unhiredcoder.database.model.MangaEntity
 
-data class MangaModel(
+data class MangaDataModel(
     val id: String,
     val imageUrl: String,
     val score: Double,
@@ -14,8 +14,9 @@ data class MangaModel(
     val isReadByUser: Boolean
 )
 
-fun MangaEntity.mapToMangaModel(): MangaModel {
-    return MangaModel(
+
+fun MangaEntity.mapToMangaDataModel(): MangaDataModel {
+    return MangaDataModel(
         id = id,
         imageUrl = imageUrl,
         score = score,

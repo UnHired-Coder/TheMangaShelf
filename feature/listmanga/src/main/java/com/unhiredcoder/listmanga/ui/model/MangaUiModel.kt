@@ -1,6 +1,6 @@
 package com.unhiredcoder.listmanga.ui.model
 
-import com.unhiredcoder.listmanga.domain.model.MangaModel
+import com.unhiredcoder.listmanga.domain.model.MangaDomainModel
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -9,11 +9,11 @@ import kotlinx.datetime.toLocalDateTime
 //scroll -> update the index on UI
 
 data class MangaGroupWithIndex(
-    val mangaMapByDates: Map<String, List<Manga>>,
+    val mangaUiModelMapByDates: Map<String, List<MangaUiModel>>,
     val pillPosToFirstMangaPos: Map<Int, Int>
 )
 
-data class Manga(
+data class MangaUiModel(
     val id: String,
     val imageUrl: String,
     val score: Double,
@@ -25,8 +25,8 @@ data class Manga(
     val isReadByUser: Boolean
 )
 
-fun MangaModel.mapToManga(): Manga {
-    return Manga(
+fun MangaDomainModel.mapToMangaUiModel(): MangaUiModel {
+    return MangaUiModel(
         id = id,
         imageUrl = imageUrl,
         score = score,
@@ -57,7 +57,7 @@ private fun getDaySuffix(day: Int): String {
     }
 }
 
-fun List<Manga>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
+fun List<MangaUiModel>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
     val mangaMapByDates = groupBy { it.publishedChapterDate }
     var firstMangaIndex = 0
     var dateIndex = 0
@@ -70,7 +70,7 @@ fun List<Manga>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
     }
 
     return MangaGroupWithIndex(
-        mangaMapByDates = mangaMapByDates,
+        mangaUiModelMapByDates = mangaMapByDates,
         datesMap
     )
 }
