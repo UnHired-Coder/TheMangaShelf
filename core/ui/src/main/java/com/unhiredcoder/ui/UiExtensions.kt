@@ -1,4 +1,4 @@
-package com.unhiredcoder.common.ui
+package com.unhiredcoder.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

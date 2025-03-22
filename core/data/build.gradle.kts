@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unhiredcoder.common"
+    namespace = "com.unhiredcoder.data"
     compileSdk = 34
 
     defaultConfig {
@@ -30,9 +30,12 @@ android {
         jvmTarget = "11"
     }
 }
+
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
 }

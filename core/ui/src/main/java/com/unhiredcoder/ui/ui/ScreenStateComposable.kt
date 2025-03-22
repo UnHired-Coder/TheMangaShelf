@@ -1,4 +1,4 @@
-package com.unhiredcoder.common.ui
+package com.unhiredcoder.ui.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
