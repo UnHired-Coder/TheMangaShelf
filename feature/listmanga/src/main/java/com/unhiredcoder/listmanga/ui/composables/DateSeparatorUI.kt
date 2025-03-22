@@ -32,7 +32,7 @@ fun DateSeparatorUI(modifier: Modifier = Modifier, date: String) {
                 )
         )
 
-        DatePillViewUI(date = date, isSelected = false, onDateSelected = {})
+        DatePillViewUI(date = date)
     }
 }
 

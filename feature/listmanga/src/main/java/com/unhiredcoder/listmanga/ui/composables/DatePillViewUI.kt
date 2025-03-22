@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DatePillViewUI(date: String, isSelected: Boolean, onDateSelected: () -> Unit = {}) {
+fun DatePillViewUI(date: String, isSelected: Boolean = false, onDateSelected: () -> Unit = {}) {
     val pilColor = remember(isSelected) {
         if (isSelected)
             Color.Black
