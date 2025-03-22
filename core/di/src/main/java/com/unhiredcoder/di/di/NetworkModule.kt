@@ -1,4 +1,4 @@
-package com.unhiredcoder.network.di
+package com.unhiredcoder.di.di
 
 import com.unhiredcoder.network.getRetrofitClient
 import org.koin.dsl.module
