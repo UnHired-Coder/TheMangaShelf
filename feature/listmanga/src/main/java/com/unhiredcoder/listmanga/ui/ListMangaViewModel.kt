@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.supervisorScope
@@ -41,11 +40,7 @@ class ListMangaViewModel(
                                         ?: 0
                                 )
                             )
-                        }
-                        .onStart {
-                            _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
-                        }
-                        .catch { e ->
+                        }.catch { e ->
                             _mangaUiStateFlow.value =
                                 Resource.Failure(_mangaUiStateFlow.value.data, e)
                         }
@@ -54,6 +49,7 @@ class ListMangaViewModel(
 
                 launch {
                     try {
+                        _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
                         syncManagUseCase()
                     } catch (e: Exception) {
                         _mangaUiStateFlow.update {
@@ -67,12 +63,14 @@ class ListMangaViewModel(
 
     fun onDateSelected(dateIndex: Int) {
         _mangaUiStateFlow.update { state ->
-            (state as? Resource.Success)?.let {
-                state.copyWith(
-                    newData = state.data?.copy(
-                        selectedDateIndex = dateIndex
+            (state as? Resource)?.let {
+                state.data?.copy(
+                    selectedDateIndex = dateIndex
+                )?.let {
+                    Resource.Success(
+                        it
                     )
-                )
+                }
             } ?: state
         }
     }

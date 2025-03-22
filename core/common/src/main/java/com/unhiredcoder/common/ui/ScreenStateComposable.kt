@@ -3,6 +3,7 @@ package com.unhiredcoder.common.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,9 +28,9 @@ import kotlinx.coroutines.flow.StateFlow
 fun <T> ScreenStateComposable(
     modifier: Modifier = Modifier,
     resourceFlow: StateFlow<Resource<T>>,
-    onSuccessComposable: @Composable (data: T) -> Unit,
-    onFailureComposable: @Composable (() -> Unit)? = null,
-    onOnLoadingComposable: @Composable (() -> Unit)? = null
+    onSuccessComposable: @Composable BoxScope.(data: T) -> Unit,
+    onFailureComposable: @Composable (BoxScope.() -> Unit)? = null,
+    onOnLoadingComposable: @Composable (BoxScope.() -> Unit)? = null
 ) {
     val resource by resourceFlow.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -60,7 +61,7 @@ fun <T> ScreenStateComposable(
                             .background(color = Color.LightGray.copy(alpha = 0.3f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        onOnLoadingComposable?.invoke() ?: kotlin.run {
+                        onOnLoadingComposable?.invoke(this) ?: kotlin.run {
                             CircularProgressIndicator(
                                 modifier = Modifier
                                     .size(20.dp),
@@ -71,7 +72,7 @@ fun <T> ScreenStateComposable(
                 }
 
                 if (resource is Resource.Failure) {
-                    onFailureComposable?.invoke() ?: kotlin.run {
+                    onFailureComposable?.invoke(this) ?: kotlin.run {
                         LaunchedEffect(Unit) {
                             //Show Error
                             snackBarHostState.showSnackbar(message = (resource as Resource.Failure<T>).errorMessage.message.toString())

@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +72,6 @@ fun ListMangaSuccessUI(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
     ) {
-
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 16.dp),
@@ -170,6 +170,20 @@ fun ListMangaSuccessUI(
         item {
             Spacer(
                 modifier = Modifier.height(20.dp)
+            )
+        }
+    }
+
+
+    if (listMangaUiState.mangaGroupWithIndex.pillPosToFirstMangaPos.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = stringResource(R.string.nothing_to_display_please_check_your_internet_connection)
             )
         }
     }

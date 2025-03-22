@@ -28,3 +28,17 @@ fun MangaEntity.mapToMangaDataModel(): MangaDataModel {
         isReadByUser = isReadByUser
     )
 }
+
+fun MangaDataModel.mapToMangaEntity(): MangaEntity {
+    return MangaEntity(
+        id = id,
+        imageUrl = imageUrl,
+        score = score,
+        popularity = popularity,
+        title = title,
+        publishedChapterDate = publishedChapterDate,
+        category = category,
+        isFavourite = isFavourite,
+        isReadByUser = isReadByUser
+    )
+}

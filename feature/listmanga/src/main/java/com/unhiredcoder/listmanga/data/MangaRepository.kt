@@ -1,13 +1,12 @@
 package com.unhiredcoder.listmanga.data
 
 import com.unhiredcoder.listmanga.data.remote.model.mapToMangaEntity
-import com.unhiredcoder.listmanga.domain.model.mapToMangaDomainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class MangaRepository(
     private val mangaRemote: IMangaC.Remote,
-    mangaLocal: IMangaC.Local
+    private val mangaLocal: IMangaC.Local
 ) : IMangaC.Repository {
 
     private val localMangaFlow = mangaLocal.getMangaList()
@@ -28,8 +27,10 @@ class MangaRepository(
         }
     }
 
-    override fun updateManagaList(mangaDataModels: List<MangaDataModel>) {
-        mangaDataModels.map { it.mapToMangaDomainModel()}
+    override suspend fun updateManagaList(mangaDataModels: List<MangaDataModel>) {
+        mangaDataModels.map { it.mapToMangaEntity() }.let {
+            mangaLocal.updateMangaList(it)
+        }
     }
 
     override suspend fun markMangaFavourite(mangaId: String): Boolean {

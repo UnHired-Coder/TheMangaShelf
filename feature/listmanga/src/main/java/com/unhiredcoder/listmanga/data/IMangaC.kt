@@ -9,7 +9,7 @@ interface IMangaC {
     interface Repository {
         fun getMangaListLocal(): Flow<List<MangaDataModel>>
         suspend fun getMangaListRemote(): Flow<List<MangaDataModel>>
-        fun updateManagaList(mangaDataModels: List<MangaDataModel>)
+        suspend fun updateManagaList(mangaDataModels: List<MangaDataModel>)
         suspend fun markMangaFavourite(mangaId: String): Boolean
     }
 
