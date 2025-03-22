@@ -40,5 +40,12 @@ android {
 }
 
 dependencies {
+    implementation(libs.koin.android)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+
+
     implementation(project(":feature:listmanga"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:di"))
 }
