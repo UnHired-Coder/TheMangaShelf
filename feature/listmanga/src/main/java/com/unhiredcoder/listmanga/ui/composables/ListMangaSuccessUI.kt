@@ -44,7 +44,7 @@ fun ListMangaSuccessUI(
     listMangaUiState: ListMangaUiState,
     onDateSelected: (dateIndex: Int) -> Unit
 ) {
-    val mangaMap = listMangaUiState.mangaGroupWithIndex.mangaMapByDates
+    val mangaMap = listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates
 
     val lazyListState = rememberLazyListState()
     val screenHeightPx = LocalConfiguration.current.screenHeightDp
@@ -93,7 +93,7 @@ fun ListMangaSuccessUI(
             )
 
             val dates =
-                remember(listMangaUiState) { listMangaUiState.mangaGroupWithIndex.mangaMapByDates.keys.toList() }
+                remember(listMangaUiState) { listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates.keys.toList() }
             val lazyRowState = rememberLazyListState()
 
 
@@ -161,7 +161,7 @@ fun ListMangaSuccessUI(
 
             items(mangas) { manga ->
                 MangaItemUI(
-                    modifier = Modifier.padding(bottom = 8.dp), manga = manga
+                    modifier = Modifier.padding(bottom = 8.dp), mangaUiModel = manga
                 )
             }
 

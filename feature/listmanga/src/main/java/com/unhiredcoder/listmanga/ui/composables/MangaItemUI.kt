@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
 import com.unhiredcoder.listmanga.R
-import com.unhiredcoder.listmanga.ui.model.Manga
+import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 
 @Composable
-fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
+fun MangaItemUI(modifier: Modifier = Modifier, mangaUiModel: MangaUiModel) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -51,7 +51,7 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                     .size(60.dp)
                     .clip(RoundedCornerShape(6.dp)),
                 imageModel = {
-                    manga.imageUrl
+                    mangaUiModel.imageUrl
                 },
                 success = { _, painter ->
                     Image(
@@ -72,14 +72,14 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
 
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = manga.title,
+                    text = mangaUiModel.title,
                     fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
-                    text = stringResource(R.string.category, manga.category),
+                    text = stringResource(R.string.category, mangaUiModel.category),
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
@@ -97,13 +97,13 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
                                 shape = RoundedCornerShape(5.dp)
                             )
                             .padding(horizontal = 6.dp, vertical = 2.dp),
-                        text = stringResource(R.string.score, manga.score),
+                        text = stringResource(R.string.score, mangaUiModel.score),
                         fontSize = 12.sp,
                         color = Color.Red
                     )
 
                     Text(
-                        text = stringResource(R.string.pub_date, manga.publishedChapterDate),
+                        text = stringResource(R.string.pub_date, mangaUiModel.publishedChapterDate),
                         fontSize = 10.sp,
                         color = Color.Gray
                     )
@@ -118,7 +118,7 @@ fun MangaItemUI(modifier: Modifier = Modifier, manga: Manga) {
 @Composable
 fun MangaItemPreview() {
     MangaItemUI(
-        manga = Manga(
+        mangaUiModel = MangaUiModel(
             id = "1",
             imageUrl = "",
             score = 100.0,
