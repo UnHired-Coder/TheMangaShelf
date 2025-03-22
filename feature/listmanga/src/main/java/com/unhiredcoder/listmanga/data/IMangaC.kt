@@ -2,13 +2,14 @@ package com.unhiredcoder.listmanga.data
 
 import com.unhiredcoder.database.model.MangaEntity
 import com.unhiredcoder.listmanga.data.remote.model.MangaResponse
-import com.unhiredcoder.listmanga.domain.model.MangaModel
 import kotlinx.coroutines.flow.Flow
 
 interface IMangaC {
 
     interface Repository {
-        fun getMangaList(): Flow<List<MangaModel>>
+        fun getMangaListLocal(): Flow<List<MangaDataModel>>
+        suspend fun getMangaListRemote(): Flow<List<MangaDataModel>>
+        fun updateManagaList(mangaDataModels: List<MangaDataModel>)
         suspend fun markMangaFavourite(mangaId: String): Boolean
     }
 
