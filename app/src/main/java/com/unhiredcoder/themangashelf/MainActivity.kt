@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,19 +58,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val listMangaViewMode: MangaViewModel by viewModel()
 
+                    LaunchedEffect(Unit) {
+                        listMangaViewMode.navigateToMangaDetail
+                            .flowWithLifecycle(lifecycle)
+                            .collect { id ->
+                                navController.navigate(NavRoutes.MangaDetails.createRoute(id))
+                       }
+                    }
+
                     ListMangaScreen(
                         modifier = Modifier.fillMaxSize(),
                         listMangaUiStateFlow = listMangaViewMode.listMangaUiState,
-                        onDateSelected = listMangaViewMode::onDateSelected,
-                        onMarkFavourite = listMangaViewMode::markFavourite,
-                        onSetAutoScroll = listMangaViewMode::onSetAutoScroll,
-                        onScrollToIndex = listMangaViewMode::onScrollToIndex,
-                        onDisplayManga = { mangaUiModel ->
-                            navController.navigate(NavRoutes.MangaDetails.createRoute(mangaUiModel.id))
-                        },
-                        onSortByScore = listMangaViewMode::onSortByScore,
-                        onSortByPopularity = listMangaViewMode::onSortByPopularity,
-                        onResetFilters = listMangaViewMode::onResetFilters
+                        onListMangaScreenActions = listMangaViewMode::onAction
                     )
                 }
 

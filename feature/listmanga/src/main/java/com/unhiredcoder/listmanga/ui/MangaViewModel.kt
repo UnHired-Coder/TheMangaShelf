@@ -6,6 +6,7 @@ import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.domain.usecase.GetMangaListUseCase
 import com.unhiredcoder.domain.usecase.MarkMangaFavouriteUseCase
 import com.unhiredcoder.domain.usecase.SyncManagUseCase
+import com.unhiredcoder.listmanga.ui.model.ListMangaScreenActions
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 import com.unhiredcoder.listmanga.ui.model.MangaListFilters
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
@@ -30,8 +31,10 @@ class MangaViewModel(
 
     private val _filterFlow = MutableStateFlow(MangaListFilters.getDefaultFilter())
 
-    init {
+    private val _navigateToMangaDetail = MutableSharedFlow<String>()
+    val navigateToMangaDetail = _navigateToMangaDetail.asSharedFlow()
 
+    init {
         viewModelScope.launch {
             supervisorScope {
                 launch {
@@ -64,7 +67,7 @@ class MangaViewModel(
                             when (current) {
                                 is Resource.Success -> Resource.Success(state)
                                 is Resource.Failure -> Resource.Failure(state, current.errorMessage)
-                                is Resource.Idle    -> Resource.Idle(state)
+                                is Resource.Idle -> Resource.Idle(state)
                                 is Resource.Loading -> Resource.Loading(state)
                             }
                         }
@@ -89,7 +92,24 @@ class MangaViewModel(
         }
     }
 
-    fun onDateSelected(dateIndex: Int) {
+    fun onAction(action: ListMangaScreenActions) {
+        when (action) {
+            is ListMangaScreenActions.OnDateSelected -> onDateSelected(action.dateIndex)
+            is ListMangaScreenActions.OnMarkFavourite -> markFavourite(action.mangaUiModel)
+            is ListMangaScreenActions.OnSetAutoScroll -> onSetAutoScroll(action.set)
+            is ListMangaScreenActions.OnScrollToIndex -> onScrollToIndex(action.index)
+            is ListMangaScreenActions.OnSortByScore -> onSortByScore()
+            is ListMangaScreenActions.OnSortByPopularity -> onSortByPopularity()
+            is ListMangaScreenActions.OnResetFilters -> onResetFilters()
+            is ListMangaScreenActions.OnDisplayManga -> {
+                viewModelScope.launch {
+                    _navigateToMangaDetail.emit(action.mangaUiModel.id)
+                }
+            }
+        }
+    }
+
+    private fun onDateSelected(dateIndex: Int) {
         _mangaUiStateFlow.update { state ->
             (state as? Resource)?.let {
                 state.data?.copy(
@@ -103,13 +123,13 @@ class MangaViewModel(
         }
     }
 
-    fun markFavourite(mangaUiModel: MangaUiModel) {
+    private fun markFavourite(mangaUiModel: MangaUiModel) {
         viewModelScope.launch {
             markMangaFavouriteUseCase(mangaUiModel.id)
         }
     }
 
-    fun onSetAutoScroll(set: Boolean) {
+    private fun onSetAutoScroll(set: Boolean) {
         _mangaUiStateFlow.update { state ->
             (state as? Resource)?.let {
                 state.data?.copy(
@@ -123,7 +143,7 @@ class MangaViewModel(
         }
     }
 
-    fun onScrollToIndex(index: Int) {
+    private fun onScrollToIndex(index: Int) {
         listMangaUiState.value.data?.let { state ->
             if (!state.isAutoScroll) {
                 onDateSelected(index)
@@ -133,15 +153,15 @@ class MangaViewModel(
         }
     }
 
-    fun onResetFilters() {
+    private fun onResetFilters() {
         sort(sortBy = MangaListFilters.SortByDate)
     }
 
-    fun onSortByScore() {
+    private fun onSortByScore() {
         sort(sortBy = MangaListFilters.SortByScore)
     }
 
-    fun onSortByPopularity() {
+    private fun onSortByPopularity() {
         sort(sortBy = MangaListFilters.SortByPopularity)
     }
 
