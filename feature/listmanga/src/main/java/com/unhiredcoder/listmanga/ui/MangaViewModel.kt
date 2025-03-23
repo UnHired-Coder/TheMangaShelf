@@ -51,7 +51,8 @@ class MangaViewModel(
                             println(listMangaUiModelResource.data)
                             _mangaUiStateFlow.update {
                                 listMangaUiModelResource
-                            } }
+                            }
+                        }
                 }
 
                 launch {
@@ -85,6 +86,30 @@ class MangaViewModel(
     fun markFavourite(mangaUiModel: MangaUiModel) {
         viewModelScope.launch {
             markMangaFavouriteUseCase(mangaUiModel.id)
+        }
+    }
+
+    fun onSetAutoScroll(set: Boolean) {
+        _mangaUiStateFlow.update { state ->
+            (state as? Resource)?.let {
+                state.data?.copy(
+                    isAutoScroll = set
+                )?.let {
+                    Resource.Success(
+                        it
+                    )
+                }
+            } ?: state
+        }
+    }
+
+    fun onScrollToIndex(index: Int) {
+        listMangaUiState.value.data?.let { state ->
+            if (!state.isAutoScroll) {
+                onDateSelected(index)
+            } else {
+                onSetAutoScroll(false)
+            }
         }
     }
 }

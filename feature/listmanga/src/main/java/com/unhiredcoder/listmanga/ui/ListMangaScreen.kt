@@ -17,8 +17,10 @@ fun ListMangaScreen(
     modifier: Modifier = Modifier,
     listMangaUiStateFlow: StateFlow<Resource<ListMangaUiState>>,
     onDateSelected: (dateIndex: Int) -> Unit,
+    onSetAutoScroll: (set:Boolean) -> Unit,
     onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit,
-    onDisplayManga: (mangaUiModel: MangaUiModel) -> Unit
+    onDisplayManga: (mangaUiModel: MangaUiModel) -> Unit,
+    onScrollToIndex: (index: Int) -> Unit
 ) {
     ScreenStateComposable(
         modifier = modifier.background(Color.Red),
@@ -28,8 +30,10 @@ fun ListMangaScreen(
                 modifier = Modifier.background(Color.White),
                 listMangaUiState = listMangaUiState,
                 onDateSelected = onDateSelected,
+                onSetAutoScroll = onSetAutoScroll,
                 onMarkFavourite = onMarkFavourite,
-                onDisplayManga = onDisplayManga
+                onDisplayManga = onDisplayManga,
+                onScrollToIndex = onScrollToIndex
             )
         }
     )

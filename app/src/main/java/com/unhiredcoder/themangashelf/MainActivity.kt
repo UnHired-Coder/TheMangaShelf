@@ -62,6 +62,8 @@ class MainActivity : ComponentActivity() {
                         listMangaUiStateFlow = listMangaViewMode.listMangaUiState,
                         onDateSelected = listMangaViewMode::onDateSelected,
                         onMarkFavourite = listMangaViewMode::markFavourite,
+                        onSetAutoScroll = listMangaViewMode::onSetAutoScroll,
+                        onScrollToIndex = listMangaViewMode::onScrollToIndex,
                         onDisplayManga = { mangaUiModel ->
                             navController.navigate(NavRoutes.MangaDetails.createRoute(mangaUiModel.id))
                         }
