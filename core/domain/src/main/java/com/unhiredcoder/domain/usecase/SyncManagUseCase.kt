@@ -2,17 +2,16 @@ package com.unhiredcoder.domain.usecase
 
 import com.unhiredcoder.domain.MangaRepository
 import com.unhiredcoder.domain.model.MangaDomainModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class SyncManagUseCase(private val mangaRepository: MangaRepository) {
-    suspend operator fun invoke() {
-        combine(
+    operator fun invoke(): Flow<Unit> {
+       return combine(
             mangaRepository.getMangaListRemote(),
             mangaRepository.getMangaList()
         ) { remoteMangasList, localMangasList ->
-            mergeMangaLists(remoteMangasList, localMangasList)
-        }.collect {
-            mangaRepository.refreshMangaList(it)
+            mangaRepository.refreshMangaList(mergeMangaLists(remoteMangasList, localMangasList))
         }
     }
 

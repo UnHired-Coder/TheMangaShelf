@@ -60,17 +60,30 @@ class MangaViewModel(
                     }.catch { e ->
                         _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
                     }.collect { state ->
-                        _mangaUiStateFlow.value = Resource.Success(state)
+                        _mangaUiStateFlow.update { current ->
+                            when (current) {
+                                is Resource.Success -> Resource.Success(state)
+                                is Resource.Failure -> Resource.Failure(state, current.errorMessage)
+                                is Resource.Idle    -> Resource.Idle(state)
+                                is Resource.Loading -> Resource.Loading(state)
+                            }
+                        }
                     }
                 }
 
                 launch {
-                    try {
-                        _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
-                        syncManagUseCase()
-                    } catch (e: Exception) {
-                        _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
-                    }
+                    syncManagUseCase()
+                        .onStart {
+                            _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
+                        }
+                        .catch { error ->
+                            _mangaUiStateFlow.value =
+                                Resource.Failure(_mangaUiStateFlow.value.data, error)
+                        }.collect { state ->
+                            _mangaUiStateFlow.value.data?.let { data ->
+                                _mangaUiStateFlow.value = Resource.Success(data)
+                            }
+                        }
                 }
             }
         }
