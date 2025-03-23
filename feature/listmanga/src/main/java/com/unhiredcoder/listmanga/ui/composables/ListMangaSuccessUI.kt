@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -73,12 +74,12 @@ fun ListMangaSuccessUI(
     }
 
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().statusBarsPadding(),
         state = lazyListState,
     ) {
         item {
             Text(
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 16.dp),
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 34.dp),
                 text = stringResource(R.string.the_manga_app),
                 fontFamily = FontFamily.Serif
             )
@@ -89,7 +90,7 @@ fun ListMangaSuccessUI(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    .padding(horizontal = 12.dp, vertical = 4.dp),
+                    .padding(start = 12.dp, end = 12.dp, top = 20.dp, bottom = 8.dp),
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black.copy(alpha = 0.6f),
