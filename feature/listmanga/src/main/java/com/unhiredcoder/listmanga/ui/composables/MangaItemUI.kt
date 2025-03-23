@@ -13,12 +13,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,10 +35,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.skydoves.landscapist.glide.GlideImage
 import com.unhiredcoder.ui.clickableWithNoRipple
 import com.unhiredcoder.listmanga.R
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun MangaItemUI(
@@ -62,7 +73,7 @@ fun MangaItemUI(
                 },
                 success = { _, painter ->
                     Image(
-                        painter = painter, // Dummy image
+                        painter = painter,
                         contentDescription = stringResource(R.string.manga_cover),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
@@ -98,21 +109,54 @@ fun MangaItemUI(
                         )
                     }
 
-                    Image(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .clickableWithNoRipple {
-                                onMarkFavourite(mangaUiModel)
-                            },
-                        painter = painterResource(remember(mangaUiModel.isFavourite) {
-                            if (mangaUiModel.isFavourite) {
-                                R.drawable.ic_favourite_filled
-                            } else
-                                R.drawable.ic_favourite_outlined
-                        }),
-                        contentDescription = null
-                    )
+                    var showFavouritePopup by remember { mutableStateOf(false) }
+                    LaunchedEffect(showFavouritePopup) {
+                        if (showFavouritePopup) {
+                            delay(1000)
+                            showFavouritePopup = false
+                        }
+                    }
 
+                    Column(
+                        modifier = Modifier.wrapContentSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clickableWithNoRipple {
+                                    showFavouritePopup = !mangaUiModel.isFavourite
+                                    onMarkFavourite(mangaUiModel)
+                                },
+                            painter = painterResource(
+                                if (mangaUiModel.isFavourite) R.drawable.ic_favourite_filled
+                                else R.drawable.ic_favourite_outlined
+                            ),
+                            contentDescription = null
+                        )
+
+                        if (showFavouritePopup) {
+                            Popup(
+                                alignment = Alignment.BottomCenter,
+                                properties = PopupProperties(
+                                    focusable = false,
+                                    dismissOnClickOutside = true,
+                                    dismissOnBackPress = true,
+                                    clippingEnabled = false
+                                )
+                            ) {
+                                val composition by rememberLottieComposition(
+                                    LottieCompositionSpec.RawRes(
+                                        R.raw.favourite_lottie
+                                    )
+                                )
+                                LottieAnimation(
+                                    modifier = Modifier,
+                                    composition = composition
+                                )
+                            }
+                        }
+                    }
                 }
 
                 Row(

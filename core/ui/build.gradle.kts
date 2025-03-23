@@ -56,6 +56,8 @@ dependencies {
     api(libs.androidx.navigation.compose)
     api(libs.kotlinx.serialization.json)
     api(libs.kotlinx.dateTime)
+    api(libs.lottie)
+
 
     implementation(project(":core:common"))
 }
