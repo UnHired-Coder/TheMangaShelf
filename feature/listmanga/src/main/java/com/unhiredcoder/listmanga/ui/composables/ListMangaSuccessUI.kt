@@ -1,5 +1,8 @@
 package com.unhiredcoder.listmanga.ui.composables
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,6 +58,9 @@ fun ListMangaSuccessUI(
     onDisplayManga: (mangaUiModel: MangaUiModel) -> Unit,
     onSetAutoScroll: (set: Boolean) -> Unit,
     onScrollToIndex: (index: Int) -> Unit,
+    onSortByScore: () -> Unit,
+    onSortByPopularity: () -> Unit,
+    onResetFilters: () -> Unit
 ) {
     val mangaMap = listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates
 
@@ -100,69 +106,95 @@ fun ListMangaSuccessUI(
         }
 
         stickyHeader {
-            Text(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
                     .padding(start = 12.dp, end = 12.dp, top = 20.dp, bottom = 8.dp),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black.copy(alpha = 0.6f),
-                text = stringResource(R.string.select_date)
-            )
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    modifier = Modifier,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black.copy(alpha = 0.6f),
+                    text = if (listMangaUiState.isFilterActive) stringResource(
+                        R.string.sorted_by,
+                        listMangaUiState.sortedBy.filterName
+                    ) else stringResource(R.string.select_date)
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                FilterPopupUi(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    isFilterActive = listMangaUiState.isFilterActive,
+                    onSortByScore = onSortByScore,
+                    onResetFilters = onResetFilters,
+                    onSortByPopularity = onSortByPopularity
+                )
+            }
 
             val dates =
                 remember(listMangaUiState) { listMangaUiState.mangaGroupWithIndex.mangaUiModelMapByDates.keys.toList() }
             val lazyRowState = rememberLazyListState()
 
+            AnimatedVisibility(
+                !listMangaUiState.isFilterActive,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                LaunchedEffect(listMangaUiState.selectedDateIndex) {
+                    val visibleItems = lazyRowState.layoutInfo.visibleItemsInfo
+                    val selectedIndex = listMangaUiState.selectedDateIndex
 
-            LaunchedEffect(listMangaUiState.selectedDateIndex) {
-                val visibleItems = lazyRowState.layoutInfo.visibleItemsInfo
-                val selectedIndex = listMangaUiState.selectedDateIndex
+                    val selectedItem = visibleItems.find { it.index == selectedIndex }
 
-                val selectedItem = visibleItems.find { it.index == selectedIndex }
+                    //Scrolling the horizontal pills
+                    if (selectedItem != null) {
+                        val itemStart = selectedItem.offset
+                        val itemEnd = itemStart + selectedItem.size
+                        val listEnd = lazyRowState.layoutInfo.viewportEndOffset
 
-                if (selectedItem != null) {
-                    val itemStart = selectedItem.offset
-                    val itemEnd = itemStart + selectedItem.size
-                    val listStart = 0
-                    val listEnd = lazyRowState.layoutInfo.viewportEndOffset
-
-                    if (itemStart < listStart) {
-                        lazyRowState.animateScrollBy(selectedItem.offset.toFloat())
-                    } else if (itemEnd > listEnd) {
-                        lazyRowState.animateScrollBy(selectedItem.size.toFloat())
+                        if (itemStart < 0) {
+                            lazyRowState.animateScrollBy(selectedItem.offset.toFloat())
+                        } else if (itemEnd > listEnd) {
+                            lazyRowState.animateScrollBy(selectedItem.size.toFloat())
+                        }
+                    } else {
+                        lazyRowState.animateScrollToItem(selectedIndex)
                     }
-                } else {
-                    lazyRowState.animateScrollToItem(selectedIndex)
+
+                    // vertical pills
+                    if (listMangaUiState.isAutoScroll) {
+                        listMangaUiState.mangaGroupWithIndex.pillPosToFirstMangaPos[listMangaUiState.selectedDateIndex]?.let { scrollIndex ->
+                            lazyListState.animateScrollToItem(
+                                if (scrollIndex > 0) scrollIndex + 2 else 0 // this offset '+2' corresponds to the two items added above
+                            )
+                        }
+                    }
                 }
 
-                if (listMangaUiState.isAutoScroll) {
-                    listMangaUiState.mangaGroupWithIndex.pillPosToFirstMangaPos[listMangaUiState.selectedDateIndex]?.let { scrollIndex ->
-                        lazyListState.animateScrollToItem(
-                            if (scrollIndex > 0) scrollIndex + 2 else 0 // this offset '+2' corresponds to the two items added above
+
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = Color.Gray.copy(0.2f)),
+                    state = lazyRowState,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    itemsIndexed(dates) { dateIndex, publishDate ->
+                        DatePillViewUI(date = publishDate,
+                            isSelected = remember(listMangaUiState.selectedDateIndex) { listMangaUiState.selectedDateIndex == dateIndex },
+                            onDateSelected = {
+                                onSetAutoScroll(true)
+                                onDateSelected(dateIndex)
+                            }
                         )
                     }
-                }
-            }
-
-
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.Gray.copy(0.2f)),
-                state = lazyRowState,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                itemsIndexed(dates) { dateIndex, publishDate ->
-                    DatePillViewUI(date = publishDate,
-                        isSelected = remember(listMangaUiState.selectedDateIndex) { listMangaUiState.selectedDateIndex == dateIndex },
-                        onDateSelected = {
-                            onSetAutoScroll(true)
-                            onDateSelected(dateIndex)
-                        }
-                    )
                 }
             }
         }

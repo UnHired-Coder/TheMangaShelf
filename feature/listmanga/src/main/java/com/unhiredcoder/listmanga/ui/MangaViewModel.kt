@@ -7,6 +7,7 @@ import com.unhiredcoder.domain.usecase.GetMangaListUseCase
 import com.unhiredcoder.domain.usecase.MarkMangaFavouriteUseCase
 import com.unhiredcoder.domain.usecase.SyncManagUseCase
 import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
+import com.unhiredcoder.listmanga.ui.model.MangaListFilters
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import com.unhiredcoder.listmanga.ui.model.mapToMangaGroupWithIndex
 import com.unhiredcoder.listmanga.ui.model.mapToMangaUiModel
@@ -28,15 +29,64 @@ class MangaViewModel(
         MutableStateFlow<Resource<ListMangaUiState>>(Resource.Idle(null))
     val listMangaUiState: StateFlow<Resource<ListMangaUiState>> = _mangaUiStateFlow.asStateFlow()
 
+
+    private val _filterFlow = MutableStateFlow(MangaListFilters.SortByDate)
+
     init {
+
         viewModelScope.launch {
+            supervisorScope {
+                val mangaFlow = getMangaListUseCase()
+                    .map { mangaList -> mangaList.map { it.mapToMangaUiModel() } }
+                    .shareIn(this, SharingStarted.Eagerly, replay = 1)
+
+                combine(
+                    mangaFlow,
+                    _filterFlow
+                ) { mangaList, filter ->
+                    val sortedList = when (filter) {
+                        MangaListFilters.SortByDate -> mangaList.sortedByDescending { it.publishedChapterDate }
+                        MangaListFilters.SortByScore -> mangaList.sortedByDescending { it.score }
+                        MangaListFilters.SortByPopularity -> mangaList.sortedByDescending { it.popularity }
+                    }
+
+                    ListMangaUiState(
+                        isFilterActive = filter != MangaListFilters.SortByDate,
+                        sortedBy = filter,
+                        mangaGroupWithIndex = sortedList.mapToMangaGroupWithIndex(),
+                        isAutoScroll = listMangaUiState.value.data?.isAutoScroll ?: false,
+                        selectedDateIndex = listMangaUiState.value.data?.selectedDateIndex ?: 0
+                    )
+                }.catch { e ->
+                    _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
+                }.collect { state ->
+                    _mangaUiStateFlow.value = Resource.Success(state)
+                }
+
+                launch {
+                    try {
+                        _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
+                        syncManagUseCase()
+                    } catch (e: Exception) {
+                        _mangaUiStateFlow.update {
+                            Resource.Failure(_mangaUiStateFlow.value.data, e)
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /*viewModelScope.launch {
             supervisorScope {
                 launch {
                     getMangaListUseCase()
                         .map { mangaList ->
                             Resource.Success(
                                 ListMangaUiState(
-                                    mangaList.map {
+                                    mangaGroupWithIndex = mangaList.sortedByDescending {
+                                        MangaListFilters.SortByPopularity
+                                    }.map {
                                         it.mapToMangaUiModel()
                                     }.mapToMangaGroupWithIndex(),
                                     selectedDateIndex = _mangaUiStateFlow.value.data?.selectedDateIndex
@@ -66,7 +116,7 @@ class MangaViewModel(
                     }
                 }
             }
-        }
+        }*/
     }
 
     fun onDateSelected(dateIndex: Int) {
@@ -110,6 +160,24 @@ class MangaViewModel(
             } else {
                 onSetAutoScroll(false)
             }
+        }
+    }
+
+    fun onResetFilters() {
+        sort(sortBy = MangaListFilters.SortByDate)
+    }
+
+    fun onSortByScore() {
+        sort(sortBy = MangaListFilters.SortByScore)
+    }
+
+    fun onSortByPopularity() {
+        sort(sortBy = MangaListFilters.SortByPopularity)
+    }
+
+    private fun sort(sortBy: MangaListFilters) {
+        _filterFlow.update {
+            sortBy
         }
     }
 }

@@ -66,7 +66,10 @@ class MainActivity : ComponentActivity() {
                         onScrollToIndex = listMangaViewMode::onScrollToIndex,
                         onDisplayManga = { mangaUiModel ->
                             navController.navigate(NavRoutes.MangaDetails.createRoute(mangaUiModel.id))
-                        }
+                        },
+                        onSortByScore = listMangaViewMode::onSortByScore,
+                        onSortByPopularity = listMangaViewMode::onSortByPopularity,
+                        onResetFilters = listMangaViewMode::onResetFilters
                     )
                 }
 

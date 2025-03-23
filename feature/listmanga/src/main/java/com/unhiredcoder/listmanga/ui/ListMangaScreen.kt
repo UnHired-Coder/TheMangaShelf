@@ -20,7 +20,10 @@ fun ListMangaScreen(
     onSetAutoScroll: (set:Boolean) -> Unit,
     onMarkFavourite: (mangaUiModel: MangaUiModel) -> Unit,
     onDisplayManga: (mangaUiModel: MangaUiModel) -> Unit,
-    onScrollToIndex: (index: Int) -> Unit
+    onScrollToIndex: (index: Int) -> Unit,
+    onSortByScore: () -> Unit,
+    onSortByPopularity: () -> Unit,
+    onResetFilters: () -> Unit
 ) {
     ScreenStateComposable(
         modifier = modifier.background(Color.Red),
@@ -33,7 +36,10 @@ fun ListMangaScreen(
                 onSetAutoScroll = onSetAutoScroll,
                 onMarkFavourite = onMarkFavourite,
                 onDisplayManga = onDisplayManga,
-                onScrollToIndex = onScrollToIndex
+                onScrollToIndex = onScrollToIndex,
+                onSortByScore = onSortByScore,
+                onResetFilters = onResetFilters,
+                onSortByPopularity = onSortByPopularity
             )
         }
     )
