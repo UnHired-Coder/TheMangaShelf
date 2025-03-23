@@ -8,4 +8,5 @@ interface MangaLocal {
     fun getMangaById(mangaId: String): Flow<MangaEntity?>
     suspend fun updateMangaList(mangas: List<MangaEntity>)
     suspend fun markMangaFavourite(mangaId: String): Boolean
+    suspend fun markAsRead(mangaId: String): Boolean
 }

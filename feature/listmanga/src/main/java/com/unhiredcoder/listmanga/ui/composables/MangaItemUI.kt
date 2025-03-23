@@ -159,5 +159,5 @@ fun MangaItemPreview() {
             category = "Anime",
             isFavourite = false
         ),
-    ){}
+    ) {}
 }

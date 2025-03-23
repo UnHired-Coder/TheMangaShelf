@@ -10,6 +10,10 @@ class MangaLocalImpl(private val mangaDao: MangaDao) : MangaLocal {
         return mangaDao.markMangaFavourite(mangaId = mangaId) > 0
     }
 
+    override suspend fun markAsRead(mangaId: String): Boolean {
+        return mangaDao.markAsRead(mangaId = mangaId) > 0
+    }
+
     override suspend fun updateMangaList(mangas: List<MangaEntity>) {
         mangaDao.updateMangaList(mangas)
     }

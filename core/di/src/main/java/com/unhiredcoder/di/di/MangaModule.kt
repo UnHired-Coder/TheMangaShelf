@@ -7,6 +7,7 @@ import com.unhiredcoder.domain.MangaRepository
 import com.unhiredcoder.domain.usecase.GetMangaListUseCase
 import com.unhiredcoder.domain.usecase.GetMangaUseCase
 import com.unhiredcoder.domain.usecase.MarkMangaFavouriteUseCase
+import com.unhiredcoder.domain.usecase.MarkAsReadUseCase
 import com.unhiredcoder.domain.usecase.SyncManagUseCase
 import com.unhiredcoder.network.api.MangaWebService
 import com.unhiredcoder.network.remote.MangaRemoteImpl
@@ -46,4 +47,9 @@ val commonModule = module {
     factory<GetMangaUseCase> {
         GetMangaUseCase(get())
     }
+
+    factory<MarkAsReadUseCase> {
+        MarkAsReadUseCase(get())
+    }
+
 }

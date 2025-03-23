@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             NavHost(
+                modifier = Modifier.systemBarsPadding(),
                 navController = navController,
                 startDestination = NavRoutes.ListManga.route
             ) {
@@ -46,16 +48,18 @@ class MainActivity : ComponentActivity() {
 
                 composable(
                     NavRoutes.MangaDetails.route,
-                    arguments = listOf(navArgument("mangaId") { type = NavType.StringType })
+                    arguments = listOf(navArgument(NavRoutes.ARG_MANGA_ID) { type = NavType.StringType })
                 ) { backStackEntry ->
                     val mangaDetailsViewModel: MangaDetailsViewModel by viewModel()
-                    val mangaId = backStackEntry.arguments?.getString("mangaId") ?: ""
+                    val mangaId = backStackEntry.arguments?.getString(NavRoutes.ARG_MANGA_ID) ?: ""
                     LaunchedEffect(Unit) {
                         mangaDetailsViewModel.getMangaDetails(mangaId)
                     }
-                    MangaDetailsScreen(mangaDetailsUiStateFlow = mangaDetailsViewModel.mangaDetailsUiState) {
-                        mangaDetailsViewModel.markFavourite(it)
-                    }
+                    MangaDetailsScreen(
+                        mangaDetailsUiStateFlow = mangaDetailsViewModel.mangaDetailsUiState,
+                        onMarkFavourite = mangaDetailsViewModel::markFavourite,
+                        onMarkRead = mangaDetailsViewModel::markAsRead,
+                    )
                 }
             }
         }

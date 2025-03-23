@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.domain.usecase.GetMangaUseCase
+import com.unhiredcoder.domain.usecase.MarkAsReadUseCase
 import com.unhiredcoder.domain.usecase.MarkMangaFavouriteUseCase
 import com.unhiredcoder.mangadetails.ui.model.MangaDetailsUiModel
 import com.unhiredcoder.mangadetails.ui.model.MangaDetailsUiState
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.*
 
 class MangaDetailsViewModel(
     private val getMangaUseCase: GetMangaUseCase,
-    private val markMangaFavouriteUseCase: MarkMangaFavouriteUseCase
+    private val markMangaFavouriteUseCase: MarkMangaFavouriteUseCase,
+    private val markAsReadUseCase: MarkAsReadUseCase
 ) : ViewModel() {
 
     private val _mangaDetailsUiStateFlow =
@@ -58,6 +60,12 @@ class MangaDetailsViewModel(
     fun markFavourite(mangaUiModel: MangaDetailsUiModel) {
         viewModelScope.launch {
             markMangaFavouriteUseCase(mangaUiModel.id)
+        }
+    }
+
+    fun markAsRead(mangaUiModel: MangaDetailsUiModel) {
+        viewModelScope.launch {
+            markAsReadUseCase(mangaUiModel.id)
         }
     }
 }

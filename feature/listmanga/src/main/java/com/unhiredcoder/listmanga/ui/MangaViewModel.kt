@@ -47,7 +47,12 @@ class MangaViewModel(
                             _mangaUiStateFlow.value =
                                 Resource.Failure(_mangaUiStateFlow.value.data, e)
                         }
-                        .collect { listMangaUiModelResource -> _mangaUiStateFlow.update { listMangaUiModelResource } }
+                        .distinctUntilChanged()
+                        .collect { listMangaUiModelResource ->
+                            println(listMangaUiModelResource.data)
+                            _mangaUiStateFlow.update {
+                                listMangaUiModelResource
+                            } }
                 }
 
                 launch {

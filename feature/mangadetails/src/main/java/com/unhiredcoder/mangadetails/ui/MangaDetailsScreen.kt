@@ -191,20 +191,29 @@ fun MangaDetailsSuccessUi(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
-            modifier = Modifier
-                .padding(bottom = 20.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .padding(horizontal = 12.dp, vertical = 6.dp)
-                .clickableWithNoRipple {
-                    onMarkRead(mangaDetailsUiModel)
-                },
-            text = "Mark as read"
-        )
+        if (mangaDetailsUiModel.isReadByUser) {
+            Text(
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                text = stringResource(R.string.marked_as_read)
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(6.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .clickableWithNoRipple {
+                        onMarkRead(mangaDetailsUiModel)
+                    },
+                text = stringResource(R.string.mark_as_read)
+            )
+        }
 
     }
 }

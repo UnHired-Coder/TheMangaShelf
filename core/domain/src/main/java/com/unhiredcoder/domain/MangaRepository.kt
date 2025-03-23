@@ -9,4 +9,5 @@ interface MangaRepository {
     fun getMangaListRemote(): Flow<List<MangaDomainModel>>
     suspend fun refreshMangaList(mangaDataModels: List<MangaDomainModel>)
     suspend fun markFavorite(id: String): Boolean
+    suspend fun markAsRead(id: String): Boolean
 }

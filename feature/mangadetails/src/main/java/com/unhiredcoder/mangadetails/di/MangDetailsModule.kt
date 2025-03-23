@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val mangaDetailsModule = module {
     viewModel {
-        MangaDetailsViewModel(get(), get())
+        MangaDetailsViewModel(get(), get(), get())
     }
 }
