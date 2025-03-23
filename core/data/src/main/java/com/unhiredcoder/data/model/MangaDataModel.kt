@@ -4,18 +4,6 @@ import com.unhiredcoder.database.model.MangaEntity
 import com.unhiredcoder.domain.model.MangaDomainModel
 import com.unhiredcoder.network.model.MangaResponse
 
-data class MangaDataModel(
-    val id: String,
-    val imageUrl: String,
-    val score: Double,
-    val popularity: Long,
-    val title: String,
-    val publishedChapterDate: Long,
-    val category: String,
-    val isFavourite: Boolean,
-    val isReadByUser: Boolean
-)
-
 fun MangaDomainModel.mapToMangaEntity(): MangaEntity {
     return MangaEntity(
         id = id,
