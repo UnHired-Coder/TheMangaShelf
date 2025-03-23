@@ -10,7 +10,6 @@ import com.unhiredcoder.listmanga.ui.model.ListMangaUiState
 import com.unhiredcoder.listmanga.ui.model.MangaListFilters
 import com.unhiredcoder.listmanga.ui.model.MangaUiModel
 import com.unhiredcoder.listmanga.ui.model.mapToMangaGroupWithIndex
-import com.unhiredcoder.listmanga.ui.model.mapToMangaUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -29,15 +28,14 @@ class MangaViewModel(
         MutableStateFlow<Resource<ListMangaUiState>>(Resource.Idle(null))
     val listMangaUiState: StateFlow<Resource<ListMangaUiState>> = _mangaUiStateFlow.asStateFlow()
 
-
-    private val _filterFlow = MutableStateFlow(MangaListFilters.SortByDate)
+    private val _filterFlow = MutableStateFlow(MangaListFilters.getDefaultFilter())
 
     init {
 
         viewModelScope.launch {
             supervisorScope {
                 val mangaFlow = getMangaListUseCase()
-                    .map { mangaList -> mangaList.map { it.mapToMangaUiModel() } }
+                    .map { mangaList -> mangaList.map { it } }
                     .shareIn(this, SharingStarted.Eagerly, replay = 1)
 
                 combine(
@@ -50,10 +48,11 @@ class MangaViewModel(
                         MangaListFilters.SortByPopularity -> mangaList.sortedByDescending { it.popularity }
                     }
 
+                    val isFilterActive = filter != MangaListFilters.SortByDate
                     ListMangaUiState(
-                        isFilterActive = filter != MangaListFilters.SortByDate,
+                        isFilterActive = isFilterActive,
                         sortedBy = filter,
-                        mangaGroupWithIndex = sortedList.mapToMangaGroupWithIndex(),
+                        mangaGroupWithIndex = sortedList.mapToMangaGroupWithIndex(isFilterActive),
                         isAutoScroll = listMangaUiState.value.data?.isAutoScroll ?: false,
                         selectedDateIndex = listMangaUiState.value.data?.selectedDateIndex ?: 0
                     )
@@ -68,55 +67,11 @@ class MangaViewModel(
                         _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
                         syncManagUseCase()
                     } catch (e: Exception) {
-                        _mangaUiStateFlow.update {
-                            Resource.Failure(_mangaUiStateFlow.value.data, e)
-                        }
+                        _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
                     }
                 }
             }
         }
-
-
-        /*viewModelScope.launch {
-            supervisorScope {
-                launch {
-                    getMangaListUseCase()
-                        .map { mangaList ->
-                            Resource.Success(
-                                ListMangaUiState(
-                                    mangaGroupWithIndex = mangaList.sortedByDescending {
-                                        MangaListFilters.SortByPopularity
-                                    }.map {
-                                        it.mapToMangaUiModel()
-                                    }.mapToMangaGroupWithIndex(),
-                                    selectedDateIndex = _mangaUiStateFlow.value.data?.selectedDateIndex
-                                        ?: 0
-                                )
-                            )
-                        }.catch { e ->
-                            _mangaUiStateFlow.value =
-                                Resource.Failure(_mangaUiStateFlow.value.data, e)
-                        }
-                        .collect { listMangaUiModelResource ->
-                            println(listMangaUiModelResource.data)
-                            _mangaUiStateFlow.update {
-                                listMangaUiModelResource
-                            }
-                        }
-                }
-
-                launch {
-                    try {
-                        _mangaUiStateFlow.value = Resource.Loading(_mangaUiStateFlow.value.data)
-                        syncManagUseCase()
-                    } catch (e: Exception) {
-                        _mangaUiStateFlow.update {
-                            Resource.Failure(_mangaUiStateFlow.value.data, e)
-                        }
-                    }
-                }
-            }
-        }*/
     }
 
     fun onDateSelected(dateIndex: Int) {

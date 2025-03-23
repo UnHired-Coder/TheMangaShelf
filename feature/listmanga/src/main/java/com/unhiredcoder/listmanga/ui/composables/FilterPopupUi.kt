@@ -42,7 +42,7 @@ fun FilterPopupUi(
                 .size(20.dp)
                 .border(width = 0.5.dp, color = remember(isFilterActive) {
                     if (isFilterActive) {
-                        Color.Black
+                        Color.Red
                     } else {
                         Color.Transparent
                     }

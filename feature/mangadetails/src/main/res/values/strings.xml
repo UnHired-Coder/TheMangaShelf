@@ -5,4 +5,5 @@
     <string name="pub_date">Pub: %1$s</string>
     <string name="marked_as_read">Marked as read</string>
     <string name="mark_as_read">Mark as read</string>
+    <string name="popularity">Popularity: %1$s</string>
 </resources>

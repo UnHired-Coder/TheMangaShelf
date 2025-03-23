@@ -62,7 +62,7 @@ fun MangaDetailsCardUi(
                         ),
                     color = Color.White,
                     fontSize = 12.sp,
-                    text = "Popularity: ${mangaDetailsUiModel.popularity}"
+                    text = stringResource(R.string.popularity, mangaDetailsUiModel.popularity)
                 )
 
                 Text(

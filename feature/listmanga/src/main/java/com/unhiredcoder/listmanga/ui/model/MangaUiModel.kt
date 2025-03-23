@@ -33,20 +33,32 @@ fun MangaDomainModel.mapToMangaUiModel(): MangaUiModel {
 }
 
 
-fun List<MangaUiModel>.mapToMangaGroupWithIndex(): MangaGroupWithIndex {
-    val mangaMapByDates = groupBy { it.publishedChapterDate }
+fun List<MangaDomainModel>.mapToMangaGroupWithIndex(isFilterActive: Boolean): MangaGroupWithIndex {
+    val mangaMapByDates =
+        groupBy {
+            (if (isFilterActive) 0 else it.publishedChapterDate)
+        }.toSortedMap(
+            compareByDescending { it }
+        ).mapKeys {
+            it.key.toReadableDate()
+        }.mapValues { mangaDomainModelList ->
+            mangaDomainModelList.value.map { mangaDomainModel ->
+                mangaDomainModel.mapToMangaUiModel()
+            }
+        }
+
     var firstMangaIndex = 0
     var dateIndex = 0
-    val datesMap: MutableMap<Int, Int> = mutableMapOf()
+    val pillPosToFirstMangaPos: MutableMap<Int, Int> = mutableMapOf()
 
-    mangaMapByDates.map { (_, u) ->
-        datesMap += mapOf(dateIndex to firstMangaIndex)
+    mangaMapByDates.map { (_, mangaUiModelList) ->
+        pillPosToFirstMangaPos += mapOf(dateIndex to firstMangaIndex)
         dateIndex++
-        firstMangaIndex += u.size + 1
+        firstMangaIndex += mangaUiModelList.size + 1
     }
 
     return MangaGroupWithIndex(
         mangaUiModelMapByDates = mangaMapByDates,
-        datesMap
+        pillPosToFirstMangaPos = pillPosToFirstMangaPos
     )
 }

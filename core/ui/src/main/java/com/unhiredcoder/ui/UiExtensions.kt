@@ -17,6 +17,8 @@ fun Modifier.clickableWithNoRipple(onClick: () -> Unit): Modifier {
 }
 
 fun Long.toReadableDate(): String {
+    if(this == 0L)
+        return ""
     return let {
         val dateTime = Instant.fromEpochSeconds(this)
             .toLocalDateTime(TimeZone.currentSystemDefault())
