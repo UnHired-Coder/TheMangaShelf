@@ -34,32 +34,34 @@ class MangaViewModel(
 
         viewModelScope.launch {
             supervisorScope {
-                val mangaFlow = getMangaListUseCase()
-                    .map { mangaList -> mangaList.map { it } }
-                    .shareIn(this, SharingStarted.Eagerly, replay = 1)
+                launch {
+                    val mangaFlow = getMangaListUseCase()
+                        .map { mangaList -> mangaList.map { it } }
+                        .shareIn(this, SharingStarted.Eagerly, replay = 1)
 
-                combine(
-                    mangaFlow,
-                    _filterFlow
-                ) { mangaList, filter ->
-                    val sortedList = when (filter) {
-                        MangaListFilters.SortByDate -> mangaList.sortedByDescending { it.publishedChapterDate }
-                        MangaListFilters.SortByScore -> mangaList.sortedByDescending { it.score }
-                        MangaListFilters.SortByPopularity -> mangaList.sortedByDescending { it.popularity }
+                    combine(
+                        mangaFlow,
+                        _filterFlow
+                    ) { mangaList, filter ->
+                        val sortedList = when (filter) {
+                            MangaListFilters.SortByDate -> mangaList.sortedByDescending { it.publishedChapterDate }
+                            MangaListFilters.SortByScore -> mangaList.sortedByDescending { it.score }
+                            MangaListFilters.SortByPopularity -> mangaList.sortedByDescending { it.popularity }
+                        }
+
+                        val isFilterActive = filter != MangaListFilters.SortByDate
+                        ListMangaUiState(
+                            isFilterActive = isFilterActive,
+                            sortedBy = filter,
+                            mangaGroupWithIndex = sortedList.mapToMangaGroupWithIndex(isFilterActive),
+                            isAutoScroll = listMangaUiState.value.data?.isAutoScroll ?: false,
+                            selectedDateIndex = listMangaUiState.value.data?.selectedDateIndex ?: 0
+                        )
+                    }.catch { e ->
+                        _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
+                    }.collect { state ->
+                        _mangaUiStateFlow.value = Resource.Success(state)
                     }
-
-                    val isFilterActive = filter != MangaListFilters.SortByDate
-                    ListMangaUiState(
-                        isFilterActive = isFilterActive,
-                        sortedBy = filter,
-                        mangaGroupWithIndex = sortedList.mapToMangaGroupWithIndex(isFilterActive),
-                        isAutoScroll = listMangaUiState.value.data?.isAutoScroll ?: false,
-                        selectedDateIndex = listMangaUiState.value.data?.selectedDateIndex ?: 0
-                    )
-                }.catch { e ->
-                    _mangaUiStateFlow.value = Resource.Failure(_mangaUiStateFlow.value.data, e)
-                }.collect { state ->
-                    _mangaUiStateFlow.value = Resource.Success(state)
                 }
 
                 launch {
