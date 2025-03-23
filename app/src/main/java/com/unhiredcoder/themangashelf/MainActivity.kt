@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +34,27 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = NavRoutes.ListManga.route
             ) {
-                composable(NavRoutes.ListManga.route) {
+                composable(
+                    route = NavRoutes.ListManga.route,
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards =  AnimatedContentTransitionScope. SlideDirection.End,
+                            animationSpec = tween(
+                                durationMillis = 220,
+                                delayMillis = 90
+                            )
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards =  AnimatedContentTransitionScope. SlideDirection.Start,
+                            animationSpec = tween(
+                                durationMillis = 220,
+                                delayMillis = 90
+                            )
+                        )
+                    }
+                ) {
                     val listMangaViewMode: MangaViewModel by viewModel()
 
                     ListMangaScreen(
@@ -47,8 +69,28 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(
-                    NavRoutes.MangaDetails.route,
-                    arguments = listOf(navArgument(NavRoutes.ARG_MANGA_ID) { type = NavType.StringType })
+                    route = NavRoutes.MangaDetails.route,
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards =  AnimatedContentTransitionScope. SlideDirection.Start,
+                            animationSpec = tween(
+                                durationMillis = 220,
+                                delayMillis = 90
+                            )
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards =  AnimatedContentTransitionScope. SlideDirection.End,
+                            animationSpec = tween(
+                                durationMillis = 220,
+                                delayMillis = 90
+                            )
+                        )
+                    },
+                    arguments = listOf(navArgument(NavRoutes.ARG_MANGA_ID) {
+                        type = NavType.StringType
+                    })
                 ) { backStackEntry ->
                     val mangaDetailsViewModel: MangaDetailsViewModel by viewModel()
                     val mangaId = backStackEntry.arguments?.getString(NavRoutes.ARG_MANGA_ID) ?: ""
