@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unhiredcoder.listmanga.R
@@ -194,6 +195,7 @@ fun ListMangaSuccessUI(
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
+                textAlign = TextAlign.Center,
                 text = stringResource(R.string.nothing_to_display_please_check_your_internet_connection)
             )
         }
