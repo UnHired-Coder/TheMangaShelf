@@ -36,7 +36,7 @@ class MangaDetailsViewModel(
                     _mangaDetailsUiStateFlow.update {
                         Resource.Failure(_mangaDetailsUiStateFlow.value.data, errorMessage = error)
                     }
-                }.distinctUntilChanged().collect { mangaDetailsUiModel ->
+                }.collect { mangaDetailsUiModel ->
                     mangaDetailsUiModel?.let {
                         _mangaDetailsUiStateFlow.update {
                             Resource.Success(
