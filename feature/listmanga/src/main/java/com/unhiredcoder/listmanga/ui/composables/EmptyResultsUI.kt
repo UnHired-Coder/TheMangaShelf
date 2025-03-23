@@ -20,7 +20,7 @@ fun EmptyResultsUI(modifier: Modifier = Modifier) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             textAlign = TextAlign.Center,
-            text = stringResource(R.string.nothing_to_display_please_check_your_internet_connection)
+            text = stringResource(R.string.nothing_to_display)
         )
     }
 }
