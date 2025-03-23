@@ -66,7 +66,7 @@ fun MangaItemUI(
         ) {
             GlideImage(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(80.dp)
                     .clip(RoundedCornerShape(6.dp)),
                 imageModel = {
                     mangaUiModel.imageUrl
@@ -100,6 +100,12 @@ fun MangaItemUI(
                             fontSize = 14.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
+                        )
+
+                        Text(
+                            text = stringResource(R.string.popularity, mangaUiModel.popularity),
+                            fontSize = 12.sp,
+                            color = Color.Gray
                         )
 
                         Text(

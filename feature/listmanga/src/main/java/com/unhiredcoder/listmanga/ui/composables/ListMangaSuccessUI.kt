@@ -72,6 +72,10 @@ fun ListMangaSuccessUI(
         }
     }
 
+    LaunchedEffect(listMangaUiState.sortedBy) {
+        lazyListState.animateScrollToItem(0)
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -83,11 +87,13 @@ fun ListMangaSuccessUI(
         }
 
         stickyHeader {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(start = 12.dp, end = 12.dp, top = 20.dp, bottom = 8.dp),
+            Row(modifier = Modifier
+                .clickableWithNoRipple {
+                    //Do nothing
+                }
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(start = 12.dp, end = 12.dp, top = 20.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

@@ -1,5 +1,6 @@
 package com.unhiredcoder.mangadetails.ui
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -111,31 +112,36 @@ fun MangaDetailsSuccessUi(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (mangaDetailsUiModel.isReadByUser) {
-                Text(
-                    modifier = Modifier
-                        .padding(bottom = 20.dp)
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    text = stringResource(R.string.marked_as_read),
-                    color = Color.White
-                )
-            } else {
-                Text(
-                    modifier = Modifier
-                        .padding(bottom = 20.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.White,
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .background(Color.Black.copy(0.8f))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                        .clickableWithNoRipple {
-                            onMarkRead(mangaDetailsUiModel)
-                        },
-                    text = stringResource(R.string.mark_as_read),
-                    color = Color.White
-                )
+            AnimatedContent(
+                targetState = mangaDetailsUiModel.isReadByUser,
+                label = "isReadByUser"
+            ) { isReadByUser ->
+                if (isReadByUser) {
+                    Text(
+                        modifier = Modifier
+                            .padding(bottom = 20.dp)
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        text = stringResource(R.string.marked_as_read),
+                        color = Color.White
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier
+                            .padding(bottom = 20.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.White,
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .background(Color.Black.copy(0.8f))
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .clickableWithNoRipple {
+                                onMarkRead(mangaDetailsUiModel)
+                            },
+                        text = stringResource(R.string.mark_as_read),
+                        color = Color.White
+                    )
+                }
             }
         }
     }

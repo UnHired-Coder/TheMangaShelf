@@ -2,7 +2,8 @@
     <string name="app_name">listmanga</string>
     <string name="the_manga_app">The Manga Shelf</string>
     <string name="manga_cover">Manga Cover</string>
-    <string name="category">Category: %1$s</string>
+    <string name="category">C: %1$s</string>
+    <string name="popularity">Popularity: %1$s</string>
     <string name="score">%1$s*</string>
     <string name="pub_date">Pub: %1$s</string>
     <string name="select_date">Select date</string>
