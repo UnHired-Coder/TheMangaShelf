@@ -3,32 +3,27 @@ package com.unhiredcoder.mangadetails.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
 import com.unhiredcoder.common.data.Resource
 import com.unhiredcoder.mangadetails.R
@@ -70,151 +65,79 @@ fun MangaDetailsSuccessUi(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val halfScreenHeight = screenHeight / 2
 
-    val scrollState = rememberScrollState()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        GlideImage(
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(halfScreenHeight),
-            imageModel = {
-                mangaDetailsUiModel.imageUrl
-            },
-            success = { _, imagePainter ->
-                Image(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    painter = imagePainter,
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = null
-                )
-            }
+                .fillMaxSize()
+                .blur(5.dp),
+            painter = painterResource(id = R.drawable.anime_bg),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
         )
 
         Column(
             modifier = Modifier
+                .align(Alignment.TopCenter)
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .background(
-                                color = Color.Black,
-                                shape = RoundedCornerShape(6.dp)
-                            )
-                            .padding(
-                                vertical = 6.dp,
-                                horizontal = 12.dp
-                            ),
-                        color = Color.White,
-                        fontSize = 12.sp,
-                        text = "Popularity: ${mangaDetailsUiModel.popularity}"
-                    )
-
-                    Text(
-                        modifier = Modifier.padding(end = 4.dp),
-                        text = mangaDetailsUiModel.title,
-                        fontSize = 20.sp,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = stringResource(R.string.category, mangaDetailsUiModel.category),
-                        fontSize = 14.sp,
-                        color = Color.Gray
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-
-
+            GlideImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .height(halfScreenHeight)
+                    .clip(shape = RoundedCornerShape(20.dp)),
+                imageModel = {
+                    mangaDetailsUiModel.imageUrl
+                },
+                success = { _, imagePainter ->
                     Image(
                         modifier = Modifier
-                            .size(30.dp)
-                            .clickableWithNoRipple {
-                                onMarkFavourite(mangaDetailsUiModel)
-                            },
-                        painter = painterResource(remember(mangaDetailsUiModel.isFavourite) {
-                            if (mangaDetailsUiModel.isFavourite) {
-                                R.drawable.ic_favourite_filled
-                            } else
-                                R.drawable.ic_favourite_outlined
-                        }),
+                            .fillMaxSize(),
+                        painter = imagePainter,
+                        contentScale = ContentScale.FillBounds,
                         contentDescription = null
                     )
-
-                    Text(
-                        modifier = Modifier
-                            .border(
-                                width = 0.5.dp,
-                                color = Color.Red,
-                                shape = RoundedCornerShape(5.dp)
-                            )
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
-                        text = stringResource(R.string.score, mangaDetailsUiModel.score),
-                        fontSize = 20.sp,
-                        color = Color.Red
-                    )
-
-                    Text(
-                        text = stringResource(
-                            R.string.pub_date,
-                            mangaDetailsUiModel.publishedChapterDate
-                        ),
-                        fontSize = 10.sp,
-                        color = Color.Gray
-                    )
                 }
+            )
+
+            MangaDetailsCardUi(
+                mangaDetailsUiModel = mangaDetailsUiModel,
+                onMarkFavourite = onMarkFavourite
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (mangaDetailsUiModel.isReadByUser) {
+                Text(
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    text = stringResource(R.string.marked_as_read),
+                    color = Color.White
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(6.dp)
+                        )
+                        .background(Color.Black.copy(0.8f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .clickableWithNoRipple {
+                            onMarkRead(mangaDetailsUiModel)
+                        },
+                    text = stringResource(R.string.mark_as_read),
+                    color = Color.White
+                )
             }
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        if (mangaDetailsUiModel.isReadByUser) {
-            Text(
-                modifier = Modifier
-                    .padding(bottom = 20.dp)
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                text = stringResource(R.string.marked_as_read)
-            )
-        } else {
-            Text(
-                modifier = Modifier
-                    .padding(bottom = 20.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(6.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                    .clickableWithNoRipple {
-                        onMarkRead(mangaDetailsUiModel)
-                    },
-                text = stringResource(R.string.mark_as_read)
-            )
-        }
-
     }
 }
 
