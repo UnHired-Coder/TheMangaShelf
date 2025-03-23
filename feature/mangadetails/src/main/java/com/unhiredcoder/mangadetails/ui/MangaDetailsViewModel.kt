@@ -24,7 +24,6 @@ class MangaDetailsViewModel(
         _mangaDetailsUiStateFlow.asStateFlow()
 
     fun getMangaDetails(mangaId: String) {
-        println("mangaId: $mangaId")
         viewModelScope.launch {
             getMangaUseCase(mangaId = mangaId)
                 .onStart {
@@ -35,7 +34,7 @@ class MangaDetailsViewModel(
                     _mangaDetailsUiStateFlow.update {
                         Resource.Failure(_mangaDetailsUiStateFlow.value.data, errorMessage = error)
                     }
-                }.collect { mangaDetailsUiModel ->
+                }.distinctUntilChanged().collect { mangaDetailsUiModel ->
                     mangaDetailsUiModel?.let {
                         _mangaDetailsUiStateFlow.update {
                             Resource.Success(
