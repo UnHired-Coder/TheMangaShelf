@@ -89,7 +89,7 @@ The app follows modular architecture with best practices and performance optimiz
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/TheMangaShelf.git
+git clone https://github.com/UnHired-Coder/TheMangaShelf.git
 cd TheMangaShelf
 ```
 
